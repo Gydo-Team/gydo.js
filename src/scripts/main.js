@@ -2,8 +2,7 @@
 
 const discord = require('discord.js');
 const client = new discord.Client();
-
-const chalk = require("chalk");
+const chalk = require("chalk")
 
 client.commands = new discord.Collection();
 client.cmdcode = new discord.Collection();
@@ -31,6 +30,12 @@ class gydo {
         });
     }
     
+    /**
+     * A Welcome Message (guildMemberAdd Event)
+     * @param {string<message>} Message
+     * @param {Number<channel>} IDNum
+     * @retuens {channel <message>}
+    */ 
     guildMemberAdd(va) {
         if(!va.message) throw new Error(`NO_LEAVE_MESSAGE_GIVEN`)
         this.message = va.message
@@ -110,7 +115,7 @@ class gydo {
     }
     
     /**
-    * 
+    * Sets the Status for the Bot
     * @param {string} Client User Status
     * @returns {string[options]}
     */
@@ -135,7 +140,7 @@ class gydo {
             await console.log(chalk.blue(`Bot's status set to: ${this.status}`))
         });
     }
-    
+
     /**
      * Sets a new command for the bot
      * @param {String|Object}
@@ -231,6 +236,9 @@ class gydo {
 }
 
 module.exports = gydo
+
+// module.exports = Client
+
 //             OLD CODE
 /*
 client.on('guildMemberAdd', member => {
