@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "module": "commonjs"
+    }, 
+    "exclude": ["node_modules", "package-lock.json"]
+}

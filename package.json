@@ -1,28 +1,34 @@
 {
   "name": "gydo-js",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
   "main": "index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node .",
+    "tstest": "tsc src/index.d.ts -t esnext -m commonjs --esModuleInterop --moduleResolution node"
+  },
+  "keywords": [
+    "discord",
+    "djs",
+    "bot-djs",
+    "dev",
+    "gydo",
+    "discordbot"
+  ],
+  "author": "Gydo Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "discord.js": "^13.1.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gydo-Team/gydo-js.git"
+    "url": "git+https://github.com/Gydo-Team/gydo.js.git"
   },
-  "keywords": [
-    "djs",
-    "discord",
-    "discordbot"
-  ],
-  "author": "",
-  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Gydo-Team/gydo-js/issues"
+    "url": "https://github.com/Gydo-Team/gydo.js/issues"
   },
-  "homepage": "https://github.com/Gydo-Team/gydo-js#readme",
-  "dependencies": {
-    "chalk": "^4.1.1",
-    "discord.js": "^12.5.3"
-  }
+  "homepage": "https://github.com/Gydo-Team/gydo.js#readme",
+  "types": "./src/index.d.ts"
 }

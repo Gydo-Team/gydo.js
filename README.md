@@ -2,40 +2,54 @@
   <br />
   <p>
     <a href="https://discord.gg/s5UcwZTzKg"><img src="https://img.shields.io/discord/823028211075383316?label=Gydo-JS%20Server&logo=discord" alt="Discord Server"/></a>
-    <a href="https://npmjs.com/package/gydo.js-dev"><img src="https://img.shields.io/npm/v/gydo.js-dev?color=%23acff00&label=gydo-js&logo=npm" alt="npm gydo" />
+    <a href="https://npmjs.com/package/gydo-js"><img src="https://img.shields.io/npm/v/gydo-js?color=%23acff00&label=gydo-js&logo=npm" alt="npm gydo" />
   </p>
+  <br />
 </div>
 
 # Gydo-JS
 
-This project is still in beta! So you might encounter some bugs! Please report the bugs on [our discord server.](https://discord.gg/wGWWCvHU6s)
+The Main branch of Gydo-JS
+(Stable Branch)
 
-## How to Install Gydo-JS
+Report bugs in our [Discord Server](https://discord.gg/s5UcwZTzKg)
 
-Type in the cmd/terminal
+[Dev Branch](https://npmjs.com/package/gydo.js-dev)
 
-`
-npm i gydo-js
-`
+[Github Repo](https://github.com/Gydo-Team/gydo.js)
 
-## Table of Contents
+## Jump to Pages (Table of Contents)
 
 - [Setup](#setup)
-  - [Create a command](#commands)
-  - [Set Bot's Status](#botstatus)
-- [Member Join Message](#joinmessageevent)
+  - [Create a Command](#commands)
+  - [Slash Commands](#slashcommands)
+  - [Status](#status) 
 - [Member Leave Message](#memberleaveevent)
+- [Member Join Message](#joinmessageevent)
 - [Links](#links)
 
 ## Setup
 
-```js
-const gydo = require('gydo-js');
-const bot = new gydo({
-    token: "<TOKEN HERE>",
-    prefix: "<PREFIX>"
+```js 
+const gydo = require("gydo-js");
+const bot = new gydo.config({
+    // change the <token here> to your bots token, same with the prefix (you can only do one prefix yet)
+    token: "<token here>",
+    prefix: "<your prefix>"
 });
+
 ```
+
+You will automatically have this intents:
+`GUILDS`
+`GUILD_MESSAGES`
+
+Which is enough, and what is required.
+
+See Intents you need: <br />
+[See DJS v13 Intents](https://discordjs.guide/popular-topics/intents.html)
+
+Once you've completed the setup, you can run `node .` (or `node <filename>.js`) in your terminal to run the bot.
 
 ## Commands
 
@@ -55,7 +69,10 @@ For the command to **actually work**
 
 To create a command do: <br />
 ```js
-bot.cmd("<cmd name>", "<code>")
+bot.cmd({
+    name: "<cmd name>", 
+    code: "<code>"
+});
 ```
 <br />
 
@@ -64,7 +81,10 @@ Every command will start with your prefix like `?ping` <br />
 **Example Command:**
 <br />
 ```js
-bot.cmd("ping", "Pong! ({ping}ms)")
+bot.cmd({ 
+    name: "ping",
+    code: "Pong! ({ping}ms)"
+});
 ```
 **Functions:**
 <br />
@@ -80,16 +100,40 @@ bot.cmd("ping", "Pong! ({ping}ms)")
 
 `{guildname}` - Sends the Guild's name <br />
 
-There is unfortunately, no documentation for this, _yet._
+Since this is the Dev branch, there is unfortunately, no documentation for this, _yet._
 
-### Bot Status
+## Slash Commands
 
+Make sure your bot has the permission to create slash commands 
+
+Simple Ping Slash Command:
 ```js
-bot.status({
-    status: "<your status>",
-    type: "PLAYING"
+bot.slashCommand({
+    name: "ping",
+    description: "a simple ping command",
+    code: "pong",
+    // optional
+    guildId: "1234567890"
 });
 ```
+
+You can also put `{ping}` inside `code: ""` to get the bots ping.
+
+If you want your slash command to only be created on a specific server, then you can put the server's guild ID in `guildId`
+
+To detect the slash command: <br />
+```js
+bot.slashCommandDetect("ping")
+```
+
+You will have to do `bot.slashCommandDetect("<slashCommandName>")` to detect the slash commands you've created, otherwise the bot will say `"interaction failed"`
+
+### Status
+
+```js 
+bot.status("<status>", { type: "PLAYING" });
+``` 
+<br />
 
 or a **Changing Status Loop** <br />
 ```js
@@ -97,13 +141,12 @@ bot.loopStatus(["<status>", "another one"], 1000, { type: "PLAYING" })
 ```
 <br />
 
-Status Types: <br />
-`PLAYING` <br />
-`LISTENING` <br />
-`STREAMING` <br />
-`WATCHING` <br />
+It must be on an Array, otherwise it'll send an error. <br />
 
-If you encounter any bugs please report it to [our Server](https://discord.gg/wGWWCvHU6s)
+The Second Argument (or the time) is in Miliseconds (1000 = 1 second), and you can't go below 1000 ms, or it'll send an error. <br />
+
+Status Types are: <br />
+`PLAYING`, `LISTENING`, `WATCHING`, and `STREAMING`
 
 ### Member Leave Event
 
@@ -111,8 +154,7 @@ If you encounter any bugs please report it to [our Server](https://discord.gg/wG
 bot.guildMemberRemove({
     message: "Sad to see you leave {member-tag}",
     // put any message you want
-    channel: "<CHANNEL ID>",
-    default: false
+    channel: "<CHANNEL ID>"
 });
 ```
 
@@ -122,11 +164,6 @@ Functions: <br />
 `{member-id}` - Returns the member's ID <br />
 
 `{guildname}` - Returns the Guild's name <br />
-
-If the `default` is set to true, It will ignore the custom message and will send this one instead: `Sad to see you leave MemberTag#0001` <br />
-
-
-If set to false it will ignore the default message and will send the custom one. <br />
 
 ### Join Message Event
 
@@ -139,17 +176,21 @@ bot.guildMemberAdd({
 ```
 
 Functions: <br />
-`{member-tag}` - Return the member's tag <br />
+`{member-tag}` - Return the member's tag
 
-`{member}` - Mentions the member that just joined <br />
+`{member}` - Mentions the member that just joined
 
-`{guildname}` - Returns the Guild's name <br />
+`{guildname}` - Returns the Guild's name
 
-`{member-id}` - Returns the member's id <br />
+`{member-id}` - Returns the member's id
 
 `{guild-memmber-count}` - Returns the Guild's Member Count (Will Include Bots)
 
 ## Links
-[Click here](https://gydo.gitbook.io/gydo-js/)
+Report the bugs on our Discord Server, and/or to our GitHub Repository.
 
-[Join our Discord server!](https://discord.gg/wGWWCvHU6s)
+[Gydo-JS Discord Server](https://discord.gg/s5UcwZTzKg)
+
+[Dev Branch](https://npmjs.com/package/gydo.js-dev)
+
+[Github Repo](https://github.com/Gydo-Team/gydo-js)
