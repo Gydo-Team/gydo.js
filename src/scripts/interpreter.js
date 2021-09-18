@@ -7,11 +7,8 @@ const discord = require("discord.js");
 const interpreter = async (client) => {
     const s = client.botprefix.get("prefix")
 
-    const prefix = `${s}`
-
-        
     client.on("messageCreate", (message) => {
-        const prefix = "?";
+        const prefix = `${s}`;
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const command = args.shift().toLowerCase();
         
