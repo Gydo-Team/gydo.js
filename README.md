@@ -1,43 +1,64 @@
 <div align="center">
   <br />
   <p>
-    <a href="https://discord.gg/s5UcwZTzKg"><img src="https://img.shields.io/discord/823028211075383316?label=Gydo-JS%20Server&logo=discord" alt="Discord Server"/></a>
-    <a href="https://npmjs.com/package/gydo-js"><img src="https://img.shields.io/npm/v/gydo-js?color=%23acff00&label=gydo-js&logo=npm" alt="npm gydo" />
+    <a href="#"><img src="https://i.imgur.com/D0F1l8i.png" alt="logo"/></a>
+  </p>
+  <p>
+    <a href="https://discord.gg/s5UcwZTzKg"><img src="https://img.shields.io/discord/823028211075383316?label=Gydo-JS%20Server&logo=discord" alt="Discord Server" /></a>
+    <a href="https://npmjs.com/package/gydo.js"><img src="https://img.shields.io/npm/v/gydo.js?color=%23acff00&label=gydo.js&logo=npm" alt="npm gydo"></a>
+    <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/Gydo-Team/gydo.js" >
+    <img alt="npm" src="https://img.shields.io/npm/dt/gydo.js">
   </p>
   <br />
 </div>
 
-# Gydo-JS
+# gydo.js
 
-The Main branch of Gydo-JS
-(Stable Branch)
+'gydo.js' is a form of discord.js designed to simplify the process of creating a Discord bot.
 
-Report bugs in our [Discord Server](https://discord.gg/s5UcwZTzKg)
+## Table of Contents
 
-[Dev Branch](https://npmjs.com/package/gydo.js-dev)
-
-[Github Repo](https://github.com/Gydo-Team/gydo.js)
-
-## Jump to Pages (Table of Contents)
-
-- [Setup](#setup)
+- [Installation](#installation)
+- [Example](#example-usage)
   - [Create a Command](#commands)
-  - [Slash Commands](#slashcommands)
-  - [Status](#status) 
-- [Member Leave Message](#memberleaveevent)
-- [Member Join Message](#joinmessageevent)
+    - [Command Handler](#command-handler)
+  - [Slash Commands](#slash-commands)
+  - [Embeds](#embeds)
+  - [Status](#status)
+- [Events](#events)
+  - [Client Error](#clienterror)
+  - [Member Leave Message](#member-leave-event)
+  - [Member Join Message](#join-message-event)
+  - [Message Update](#message-update)
+- [Contributing](#contributing)
 - [Links](#links)
 
-## Setup
+## Installation
+
+**Node v16.6.0 or later is required**
+
+```sh-session
+npm install gydo.js
+```
+
+## Example Usage
 
 ```js 
-const gydo = require("gydo-js");
+const gydo = require("gydo.js-dev");
 const bot = new gydo.config({
     // change the <token here> to your bots token, same with the prefix (you can only do one prefix yet)
     token: "<token here>",
     prefix: "<your prefix>"
 });
 
+// Detect Messages
+bot.MessageDetect();
+
+// Ping Command
+bot.cmd({
+    name: "ping",
+    code: "Pong! | $[ping]ms'
+});
 ```
 
 You will automatically have this intents:
@@ -45,9 +66,6 @@ You will automatically have this intents:
 `GUILD_MESSAGES`
 
 Which is enough, and what is required.
-
-See Intents you need: <br />
-[See DJS v13 Intents](https://discordjs.guide/popular-topics/intents.html)
 
 Once you've completed the setup, you can run `node .` (or `node <filename>.js`) in your terminal to run the bot.
 
@@ -83,24 +101,45 @@ Every command will start with your prefix like `?ping` <br />
 ```js
 bot.cmd({ 
     name: "ping",
-    code: "Pong! ({ping}ms)"
+    code: "Pong! | $[ping]ms"
 });
 ```
 **Functions:**
-<br />
-`{ping}` - Sends the Bot's ping <br />
 
-`{message-author-tag}` - Sends the tag of the user who sent/ran the command <br />
+`$[ping]` - Sends the Bot's ping
 
-`{message-author-id}` - Sends the ID of the User who ran the command <br /> 
+`$[author.tag]` - Author's User Tag of the message
 
-`{bot-user-tag}` - Sends the tag of your Bot <br />
+**Args**
 
-`{bot-user-id}` - Sends the ID of your Bot <br />
+`$[args;<num>]`
 
-`{guildname}` - Sends the Guild's name <br />
+You can replace `<num>` with a number.
 
-Since this is the Dev branch, there is unfortunately, no documentation for this, _yet._
+Example: 
+
+Code: `$[args;0]`
+
+Message sent by user: "!example gydo"
+
+Output: `gydo`
+
+Raw Args Output: `["gydo"]`
+
+### Command Handler
+
+Baisc Command Handler Example:
+
+```js
+const fs = require('fs');
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    
+    bot.cmd(command);
+}
+```
 
 ## Slash Commands
 
@@ -108,7 +147,7 @@ Make sure your bot has the permission to create slash commands
 
 Simple Ping Slash Command:
 ```js
-bot.slashCommand({
+bot.slashCommand.create({
     name: "ping",
     description: "a simple ping command",
     code: "pong",
@@ -121,32 +160,105 @@ You can also put `{ping}` inside `code: ""` to get the bots ping.
 
 If you want your slash command to only be created on a specific server, then you can put the server's guild ID in `guildId`
 
-To detect the slash command: <br />
+If you want it so only the user who created the interaction can see it, add the property in `slashCommand.create({})`: `ephemeral: true`
+
+To detect the slash command:
+
 ```js
-bot.slashCommandDetect("ping")
+bot.slashCommand.detect("ping")
 ```
 
-You will have to do `bot.slashCommandDetect("<slashCommandName>")` to detect the slash commands you've created, otherwise the bot will say `"interaction failed"`
+You will have to do `bot.slashCommand.detect("<slashCommandName>")` to detect the slash commands you've created, otherwise the bot will say `"interaction failed"`
+
+## ClientError
+
+`ClientError` _**extends**_ [EventEmitter](https://nodejs.org/api/events.html)
+
+```js
+const { ClientError } = require('gydo.js-dev');
+
+const ClientErr = new ClientError();
+
+ClientErr.on('error', error => {
+    console.error(error);
+});
+```
+
+## Embeds
+
+To make an embed:
+
+You will first have to specify on what command should the embed be attached on. It'll automatically attached on a command, if you have put one, and does exist.
+
+
+All things you could add in the embed's property is mentioned here:
+
+```js
+new gydo.Embed("<any of your command name>", {
+    title: "Embed Title",
+    author: "Embed Author",
+    authorURL: "<some URL here>",
+    description: "Embed Description \n [Hyper Link](https://npmjs.com/package/gydo.js-dev/)",
+    footer: "Embed Footer",
+    // (You can add more than 2 fields)
+    fields: [
+        {
+            name: "First Field",
+            value: "First Field Value",
+            // Optional
+            inline: true
+        },
+        {
+            name: "Second Field",
+            value: "Second Field Value"
+        }
+    ],
+    color: "RANDOM",
+    timestamp: true
+});
+```
 
 ### Status
 
 ```js 
-bot.status("<status>", { type: "PLAYING" });
+bot.activity.setActivity("<status>", { type: "PLAYING" });
 ``` 
-<br />
 
-or a **Changing Status Loop** <br />
+or a **Changing Status Loop**
 ```js
-bot.loopStatus(["<status>", "another one"], 1000, { type: "PLAYING" })
+bot.activity.loopStatus(["<status>", "another one"], 1000, { type: "PLAYING" })
 ```
-<br />
 
-It must be on an Array, otherwise it'll send an error. <br />
+It must be on an Array, otherwise it'll send an error.
 
-The Second Argument (or the time) is in Miliseconds (1000 = 1 second), and you can't go below 1000 ms, or it'll send an error. <br />
+The Second Argument (or the time) is in Miliseconds (1000 = 1 second), and you can't go below 1000 ms, or it'll send an error.
 
-Status Types are: <br />
-`PLAYING`, `LISTENING`, `WATCHING`, and `STREAMING`
+Status Types are:
+`PLAYING`, 
+
+`LISTENING`, 
+
+`WATCHING`, and 
+
+`STREAMING`
+
+**You can also do just a normal status:**
+
+```js
+bot.activity.setUserStatus('idle');
+```
+
+Normal Status Types are:
+
+`idle` (Idle)
+
+`dnd` (Do not Disturb)
+
+`invisible` (Invisible)
+
+`online` (Online)
+
+## Events
 
 ### Member Leave Event
 
@@ -186,11 +298,44 @@ Functions: <br />
 
 `{guild-memmber-count}` - Returns the Guild's Member Count (Will Include Bots)
 
+# Message Update
+
+`MessageUpdate` _**extends**_ [Base](https://discord.js.org/#/docs/main/stable/class/Base)
+
+**Example:**
+
+```js
+bot.MessageUpdate({
+    channel: "<CHANNEL_ID>",
+    message: "<MESSAGE>"
+});
+```
+
+**Functions:**
+
+`{oldMessage}` - Old Message Content _before_ the message were updated
+
+`{newMessage}` - New Message Content _after_ the message were updated
+
+`{message.author.id}` - Message Author's ID
+
+`{message.author.tag}` - Message Author's User Tag
+
+`{message.author.mention}` - Mentions the Message Author
+
+`{message.channel}` - the Channel the message was sent on by the author
+
+## Contributing
+
+You can contribute on gydo.js dev branch by making a pull request on our [GitHub Repository](https://github.com/Gydo-Team/gydo.js)
+
+[See Contributing Guide](https://github.com/Gydo-Team/gydo.js-dev/blob/main/docs/CONTRIBUTING.md)
+
+...and Thanks for Contributing!
+
 ## Links
 Report the bugs on our Discord Server, and/or to our GitHub Repository.
 
 [Gydo-JS Discord Server](https://discord.gg/s5UcwZTzKg)
 
-[Dev Branch](https://npmjs.com/package/gydo.js-dev)
-
-[Github Repo](https://github.com/Gydo-Team/gydo-js)
+[Github Repo](https://github.com/Gydo-Team/gydo.js)

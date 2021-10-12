@@ -1,8 +1,13 @@
 {
-  "name": "gydo-js",
-  "version": "1.0.1",
-  "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
-  "main": "index.js",
+  "name": "gydo.js",
+  "version": "1.0.0",
+  "description": "",
+  "exports": {
+    ".": {
+      "require": "./src/index.js"
+    }
+  },
+  "main": "./src/index.js",
   "scripts": {
     "test": "node .",
     "tstest": "tsc src/index.d.ts -t esnext -m commonjs --esModuleInterop --moduleResolution node"
@@ -15,11 +20,15 @@
     "gydo",
     "discordbot"
   ],
-  "author": "Gydo Team",
+  "author": "John Heinrich",
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^4.1.1",
-    "discord.js": "^13.1.0"
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.2.0"
+  },
+  "engines": {
+    "node": ">=16.6.0"
   },
   "repository": {
     "type": "git",
@@ -29,5 +38,5 @@
     "url": "https://github.com/Gydo-Team/gydo.js/issues"
   },
   "homepage": "https://github.com/Gydo-Team/gydo.js#readme",
-  "types": "./src/index.d.ts"
+  "types": "./typings/index.d.ts"
 }

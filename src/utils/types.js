@@ -2,8 +2,21 @@
 
 /**
  * Types of Status for your bot 
- * @typedef {String} Type
-*/
+ */
 exports.Type = {
-    Types: ["PLAYING", "LISTENING", "WATCHING", "STREAMING"]
+    Types: [
+        "PLAYING", 
+        "LISTENING", 
+        "WATCHING", 
+        "STREAMING"
+    ]
+}
+
+/**
+ * Types of Events
+ */
+exports.EventTypes = {
+    guildMemberAdd: "guildMemberAdd",
+    guildMemberRemove: "guildMemberRemove",
+    messageUpdate: "messageUpdate",
 }
