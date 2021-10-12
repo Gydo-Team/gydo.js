@@ -14,7 +14,7 @@
 
 # gydo.js
 
-'gydo.js' is a form of discord.js designed to simplify the process of creating a Discord bot.
+'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.
 
 ## Table of Contents
 
@@ -57,7 +57,7 @@ bot.MessageDetect();
 // Ping Command
 bot.cmd({
     name: "ping",
-    code: "Pong! | $[ping]ms"
+    code: "Pong! | $[ping]ms'
 });
 ```
 

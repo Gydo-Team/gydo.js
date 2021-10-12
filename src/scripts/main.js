@@ -43,6 +43,8 @@ class config {
      * });
      */
     constructor (options = { token, prefix, manualIntents, logEvents }) {
+        const { token, prefix, manualIntents, logEvents } = options;
+        
         if(!token) throw new Error(`INVALID_TOKEN`);
 
         if(!prefix) throw new Error(`No Prefix Given!`);

@@ -41,7 +41,7 @@ export class ActivityManager {
     public constructor(client: Client);
     public setActivity(status: string, options: ActivityTypes): Presence;
     public setUserStatus(status: NormalStatusTypes): Presence;
-    public loopStatus(arrayOfStatus: string[] | Array<string>, time: number, type: ActivityTypes): Presence[];
+    public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): Presence[];
     public readonly normalStatus: string;
     public readonly currentStatus: string;
 }
@@ -90,8 +90,8 @@ export class interpreter {
     private _isReply(command: string, client: Client): boolean | null;
     private readonly code: string;
     private readonly res: string;
-    private readonly functions: Array<string> | null;
-    private readonly args: Array<string>;
+    private readonly functions: string[] | null;
+    private readonly args: string[];
     private readonly _message: string;
     private readonly currentCommand: string | null;
     private _startInterpreter(client: Client): string;
