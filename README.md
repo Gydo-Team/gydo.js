@@ -57,7 +57,7 @@ bot.MessageDetect();
 // Ping Command
 bot.cmd({
     name: "ping",
-    code: "Pong! | $[ping]ms'
+    code: "Pong! | $[ping]ms"
 });
 ```
 
