@@ -23,11 +23,11 @@ class guildMemberAdd {
             const welcomeChannel = member.guild.channels.cache.get(this.channel);
                 
             const welcome = this.message
-            .replaceAll("{member-tag}", member.user.tag)
-            .replaceAll("{member}", Util.mention(member.user.id, "user"))
-            .replaceAll("{guildname}", member.guild.name)
-            .replaceAll("{member-id}", member.user.id)
-            .replaceAll("{guild-member-count}", member.guild.memberCount)
+            .replaceAll("$[member.tag]", member.user.tag)
+            .replaceAll("$[member]", Util.mention(member.user.id, "user"))
+            .replaceAll("$[guild.name]", member.guild.name)
+            .replaceAll("$[member.id]", member.user.id)
+            .replaceAll("$[guild.memberCount]", member.guild.memberCount)
                 
     
             welcomeChannel.send(`${welcome}`)

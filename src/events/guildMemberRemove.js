@@ -24,9 +24,10 @@ class guildMemberRemove {
             const leaveChannel = member.guild.channels.cache.get(this.channel)
                 
             const message = this.message
-            .replaceAll("{member-tag}", member.user.tag)
-            .replaceAll("{member-id}", member.user.id)
-            .replaceAll("{guildname}", member.guild.name)
+            .replaceAll("$[member.tag]", member.user.tag)
+            .replaceAll("$[member.id]", member.user.id)
+            .replaceAll("$[guild.name]", member.guild.name)
+            .replaceAll("$[guild.memberCount]", member.guild.memberCount)
                 
             leaveChannel.send(`${message}`)
         });

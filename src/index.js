@@ -19,4 +19,6 @@ module.exports = {
     
     // Utils
     Util: require('./utils/util'),
+    Types: require('./utils/types'),
+    RawClient: require('./utils/client'),
 };

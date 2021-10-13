@@ -131,8 +131,8 @@ export interface IGuildMember {
 }
 
 export interface IEvents {
-    channel?: Channel | string;
-    message?: Message | string;
+    channel?: Channel;
+    message?: Message;
 }
 
 export type ActivityOptions = 

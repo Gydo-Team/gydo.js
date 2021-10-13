@@ -264,39 +264,43 @@ Normal Status Types are:
 
 ```js
 bot.guildMemberRemove({
-    message: "Sad to see you leave {member-tag}",
+    message: "Sad to see you leave $[member.tag]",
     // put any message you want
     channel: "<CHANNEL ID>"
 });
 ```
 
-Functions: <br />
-`{member-tag}` - Returns the member's tag <br />
+Functions:
 
-`{member-id}` - Returns the member's ID <br />
+`$[member.tag]` - Returns the member's tag
 
-`{guildname}` - Returns the Guild's name <br />
+`$[member.id]` - Returns the member's ID
+
+`$[guild.name]` - Returns the Guild's name
+
+`$[guild.memberCount]` - Returns the Guild's Member Count (Will Include Bots)
 
 ### Join Message Event
 
 ```js
 bot.guildMemberAdd({
     // put any message here
-    message: "{member-tag} Welcome to {guildname}!",
+    message: "$[member.tag] Welcome to $[guild.name]!",
     channel: "<channel ID>"
 });
 ```
 
-Functions: <br />
-`{member-tag}` - Return the member's tag
+Functions:
 
-`{member}` - Mentions the member that just joined
+`$[member.tag]` - Return the member's tag
 
-`{guildname}` - Returns the Guild's name
+`$[member]` - Mentions the member that just joined
 
-`{member-id}` - Returns the member's id
+`$[guild.name]` - Returns the Guild's name
 
-`{guild-memmber-count}` - Returns the Guild's Member Count (Will Include Bots)
+`$[member.id]` - Returns the member's id
+
+`$[guild.memberCount]` - Returns the Guild's Member Count (Will Include Bots)
 
 # Message Update
 
@@ -313,17 +317,17 @@ bot.MessageUpdate({
 
 **Functions:**
 
-`{oldMessage}` - Old Message Content _before_ the message were updated
+`$[oldMessage]` - Old Message Content _before_ the message were updated
 
-`{newMessage}` - New Message Content _after_ the message were updated
+`$[newMessage]` - New Message Content _after_ the message were updated
 
-`{message.author.id}` - Message Author's ID
+`$[author.id]` - Message Author's ID
 
-`{message.author.tag}` - Message Author's User Tag
+`$[author.tag]` - Message Author's User Tag
 
-`{message.author.mention}` - Mentions the Message Author
+`$[author]` - Mentions the Message Author
 
-`{message.channel}` - the Channel the message was sent on by the author
+`$[channel]` - the Channel the message was sent on by the author
 
 ## Contributing
 

@@ -27,12 +27,12 @@ class MessageUpdate extends Base {
             const msgUpdateChannel = oldMessage.guild.channels.cache.get(channel);
             
             const code = message
-            .replaceAll('{oldMessage}', oldMessage.content)
-            .replaceAll('{newMessage}', newMessage.content)
-            .replaceAll('{message.author.id}', oldMessage.author.id)
-            .replaceAll('{message.author.tag}', oldMessage.author.tag)
-            .replaceAll('{message.author.mention}', oldMessage.author)
-            .replaceAll('{message.channel}', oldMessage.channel)
+            .replaceAll('$[oldMessage]', oldMessage.content)
+            .replaceAll('$[newMessage]', newMessage.content)
+            .replaceAll('$[author.id]', oldMessage.author.id)
+            .replaceAll('$[author.tag]', oldMessage.author.tag)
+            .replaceAll('$[author]', oldMessage.author)
+            .replaceAll('$[channel]', oldMessage.channel)
             
             if(oldMessage.content === newMessage.content) return;
             
