@@ -15,7 +15,6 @@ module.exports = {
     EventsManager: require('./managers/EventsManager'),
     ActivityManager: require("./managers/ActivityManager"),
     SlashCommandManager: require('./managers/SlashCommandManager'),
-    ClientError: require('./managers/ClientError'),
     
     // Utils
     Util: require('./utils/util'),

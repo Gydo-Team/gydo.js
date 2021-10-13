@@ -14,7 +14,6 @@ import {
     MessageEmbed,
     Base
 } from "discord.js";
-import { EventEmitter } from 'events';
 import {
     Snowflake,
 } from 'discord-api-types/v9'
@@ -29,11 +28,12 @@ export class config {
     public readonly tag: string | null;
     public activity: ActivityManager;
     public slashCommand: SlashCommandManager;
-    public guildMemberAdd(va: IGuildMember): void;
-    public guildMemberRemove(va: IGuildMember): void;
-    public MessageUpdate(va: IEvents): void;
-    public cmd(cmd: ICommand): void;
+    public guildMemberAdd(options: IGuildMember): void;
+    public guildMemberRemove(options: IGuildMember): void;
+    public MessageUpdate(options: IEvents): void;
+    public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
+    public onError(callback: any): string;
     public toJSON(): JSON;
 }
 
@@ -61,8 +61,8 @@ export class SlashCommandManager {
 }
 
 export class Embed {
-    public constructor(cmd: string, options: IEmbed);
-    private readonly cmd: string;
+    public constructor(target: string, options: IEmbed);
+    private readonly target: string;
     private readonly embedTitle: string | null;
     private readonly embedDesc: string | null;
     private readonly embedFooter: string | null;
@@ -79,10 +79,6 @@ export class MessageUpdate extends Base {
     public readonly message: string;
     public readonly channel: Channel;
     public toJSON(): JSON;
-}
-
-export class ClientError extends EventEmitter {
-    public readonly error: string | null;
 }
 
 export class interpreter {

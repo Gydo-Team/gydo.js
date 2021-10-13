@@ -26,10 +26,11 @@
   - [Embeds](#embeds)
   - [Status](#status)
 - [Events](#events)
-  - [Client Error](#clienterror)
   - [Member Leave Message](#member-leave-event)
   - [Member Join Message](#join-message-event)
   - [Message Update](#message-update)
+- [Callbacks](#callbacks)
+  - [Client Error](#client-error)
 - [Contributing](#contributing)
 - [Links](#links)
 
@@ -169,20 +170,6 @@ bot.slashCommand.detect("ping")
 
 You will have to do `bot.slashCommand.detect("<slashCommandName>")` to detect the slash commands you've created, otherwise the bot will say `"interaction failed"`
 
-## ClientError
-
-`ClientError` _**extends**_ [EventEmitter](https://nodejs.org/api/events.html)
-
-```js
-const { ClientError } = require('gydo.js-dev');
-
-const ClientErr = new ClientError();
-
-ClientErr.on('error', error => {
-    console.error(error);
-});
-```
-
 ## Embeds
 
 To make an embed:
@@ -301,7 +288,7 @@ Functions:
 
 `$[guild.memberCount]` - Returns the Guild's Member Count (Will Include Bots)
 
-# Message Update
+## Message Update
 
 `MessageUpdate` _**extends**_ [Base](https://discord.js.org/#/docs/main/stable/class/Base)
 
@@ -327,6 +314,16 @@ bot.MessageUpdate({
 `$[author]` - Mentions the Message Author
 
 `$[channel]` - the Channel the message was sent on by the author
+
+# Callbacks
+
+## ClientError
+
+**Usage:**
+
+```js
+bot.onError(err => console.error(err));
+```
 
 ## Contributing
 

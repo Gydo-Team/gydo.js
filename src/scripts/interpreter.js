@@ -160,7 +160,7 @@ class interpreter {
 
         const functions = this.functions
 
-        for (const func of funcs) {
+        for await (const func of funcs) {
             for (let x = functions.length - 1; x > 0; x--) {
                 if (typeof this.res !== 'string') return;
                 

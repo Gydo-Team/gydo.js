@@ -41,8 +41,20 @@ class config {
      *     prefix: "!"
      * });
      */
-    constructor (options = { token, prefix, logEvents }) {
-        const { token, prefix, logEvents } = options;
+    constructor (options = {}) {
+        // const { token, prefix, logEvents } = options;
+        
+        const { token, prefix, logEvents } = Object.defineProperties(options, {
+            token: {
+                writable: true,
+            },
+            prefix: {
+                writable: true,
+            },
+            logEvents: {
+                writable: true,
+            },
+        });
         
         if(!token) throw new Error(`INVALID_TOKEN`);
 
@@ -116,70 +128,76 @@ class config {
     /**
      * A Welcome Message (guildMemberAdd Event)
      * Requires a channel id to return the message
-     * @param {string} channel
-     * @param {string} message
+     * @param {string} options.channel
+     * @param {string} options.message
      * @example bot.guildMemberAdd({
          channel: "1234567891011",
          message: "{member} Welcome!"
      })
      */ 
-    guildMemberAdd({ channel, message }) {
+    guildMemberAdd(options = {}) {
+        const channel = Object.defineProperty(options, 'channel', { writable: true });
+        const message = Object.defineProperty(options, 'message', { writable: true });
+        
         new guildMemberAdd(channel, message, client);
     }
     
     /**
      * A leave message (guildMemberRemove Event)
-     * @param {string} channel
-     * @param {string} message
+     * @param {string} options.channel
+     * @param {string} options.message
      * @example bot.guildMemberAdd({
          channel: "1234567891011",
          message: "Sad to see you leave {member}.."
      })
      */ 
-    guildMemberRemove({ channel, message }) {
+    guildMemberRemove(options = {}) {
+        const channel = Object.defineProperty(options, 'channel', { writable: true });
+        const message = Object.defineProperty(options, 'message', { writable: true });
+        
         new guildMemberRemove(channel, message, client);
     }
     
     /**
      * Executes the command if any when a message is updated
-     * @param {Channel|string} channel
-     * @param {Message|string} message
+     * @param {Channel|string} options.channel
+     * @param {Message|string} options.message
      */
-    MessageUpdate({ channel, message }) {
+    MessageUpdate(options = {}) {
         new MessageUpdate({
-            channel: channel,
-            message: message
+            channel: options.channel,
+            message: options.message
         });
     }
 
     /**
      * Sets a new command for the bot
-     * @param {string} name
-     * @param {string} code
-     * @param {string} [messageReply]
+     * @param {string} commandOptions.name
+     * @param {string} commandOptions.code
+     * @param {string} [commandOptions.messageReply]
      * @example
      * bot.cmd({
          name: 'ping',
          code: 'pong!'
      })
      */
-    cmd({ name, code, messageReply }) {
+    cmd(commandOptions = {}) {
         /**
          * Shows the commands you have put, if there is one
          * @type {?string}
          */
-        this.cmdname = name;
+        this.cmdname = commandOptions.name;
         
-        if(!name) throw new Error(`CMD_NAME_EMPTY`)
+        if(!commandOptions.name) throw new Error(`CMD_NAME_EMPTY`)
 
-        if(!code) throw new Error(`CMD_CODE_EMPTY`)
+        if(!commandOptions.code) throw new Error(`CMD_CODE_EMPTY`)
 
-        if(typeof name !== 'string') throw new TypeError(`CMD_NAME_NOT_STRING`)
-        if(typeof code !== 'string') throw new TypeError(`CMD_CODE_NOT_STRING`)
+        if(typeof commandOptions.name !== 'string') throw new TypeError(`CMD_NAME_NOT_STRING`)
+        if(typeof commandOptions.code !== 'string') throw new TypeError(`CMD_CODE_NOT_STRING`)
 
-        client.commands.set(name, name);
-        client.cmdcode.set(name, code);
-        client.cmdreply.set(name, messageReply);
+        client.commands.set(commandOptions.name, commandOptions.name);
+        client.cmdcode.set(commandOptions.name, commandOptions.code);
+        client.cmdreply.set(commandOptions.name, commandOptions.messageReply);
     }
 
     /**
@@ -187,6 +205,13 @@ class config {
      */
     MessageDetect() {
         new Interpreter(client);
+    }
+    
+    /**
+     * When a client error occurs, the callback will be called
+     */
+    onError(callback) {
+        client.on('error', (err) => callback(err));
     }
     
     toJSON() {

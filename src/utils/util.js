@@ -1,4 +1,9 @@
 class Util {
+    /**
+     * To mention a user/role/VC
+     * @param {string} target
+     * @param {stribg} mentionType
+     */
     static mention(target, mentionType) {
         if (mentionType === "user") {
             return `<@!` + target + `>`
