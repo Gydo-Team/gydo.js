@@ -8,6 +8,10 @@ const chalk = require('chalk');
 */
 class ActivityManager {
     constructor(wantLogged) {
+        /**
+         * If you want it to be logged
+         * @private
+         */
         this.wantLogged = wantLogged;
     }
     

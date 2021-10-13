@@ -4,6 +4,10 @@ class Util {
             return `<@!` + target + `>`
         } else if (mentionType === "role") {
             return `<@&` + target `>`
+        } else if (mentionType === 'channel') {
+            return '<#' + target + '>'
+        } else if (mentionType === 'vc') {
+            return '<#!' + target + '>'
         }
     }
 }

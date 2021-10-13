@@ -1,23 +1,23 @@
 'use strict';
 const discord = require('discord.js');
-const { Intents, Client, MessageEmbed, Constants } = require("discord.js");
+const { Intents, Client, MessageEmbed, Constants, Collection } = require("discord.js");
 const intents = new Intents();
 const client = require('../utils/client');
 const fs = require("fs");
 const chalk = require("chalk");
 
-client.commands = new discord.Collection();
-client.cmdcode = new discord.Collection();
-client.botprefix = new discord.Collection();
-client.slashName = new discord.Collection();
-client.slashCode = new discord.Collection();
-client.slashEphemeral = new discord.Collection();
-client.cmdreply = new discord.Collection();
-client.cmds = new discord.Collection();
+client.commands = new Collection();
+client.cmdcode = new Collection();
+client.botprefix = new Collection();
+client.slashName = new Collection();
+client.slashCode = new Collection();
+client.slashEphemeral = new Collection();
+client.cmdreply = new Collection();
+client.cmds = new Collection();
 
 const guildMemberAdd = require("../events/guildMemberAdd");
 const guildMemberRemove = require("../events/guildMemberRemove");
-const interpreter = require("./interpreter");
+const Interpreter = require("./interpreter");
 const { Message, Presence, Channel, User, GuildMember, Role } = require("discord.js");
 const { ApplicationCommandOptionTypes } = Constants;
 const ActivityManager = require("../managers/ActivityManager");
@@ -32,7 +32,6 @@ class config {
      * Simple and needed setup to start the bot
      * @param {string} options.token
      * @param {string} options.prefix
-     * @param {boolean} options.manualIntents If you want to manually set intents (not recommended)
      * @param {boolean} logEvents If you want to log the events on what ks happening on the bot
      * @example
      * // Example
@@ -42,8 +41,8 @@ class config {
      *     prefix: "!"
      * });
      */
-    constructor (options = { token, prefix, manualIntents, logEvents }) {
-        const { token, prefix, manualIntents, logEvents } = options;
+    constructor (options = { token, prefix, logEvents }) {
+        const { token, prefix, logEvents } = options;
         
         if(!token) throw new Error(`INVALID_TOKEN`);
 
@@ -187,7 +186,7 @@ class config {
      * Detects the command, if any.
      */
     MessageDetect() {
-        new interpreter(client);
+        new Interpreter(client);
     }
     
     toJSON() {

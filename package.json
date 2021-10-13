@@ -1,6 +1,6 @@
 {
   "name": "gydo.js",
-  "version": "1.1.0-dev.e940d18aaa16061bf92467654b9ab3c5",
+  "version": "1.1.0-dev.72b4c4f5608a6080623e27fafda059a5",
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
   "exports": {
     ".": {
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "node .",
     "test:dnt": "node ../testings/test.js",
-    "tstest": "tsc src/index.d.ts -t esnext -m commonjs --esModuleInterop --moduleResolution node"
+    "test:tsc": "tsc typings/index.d.ts -t esnext -m commonjs --esModuleInterop --moduleResolution node"
   },
   "keywords": [
     "discord",
@@ -33,11 +33,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gydo-Team/gydo.js-dev.git"
+    "url": "git+https://github.com/Gydo-Team/gydo.js.git"
   },
   "bugs": {
-    "url": "https://github.com/Gydo-Team/gydo.js-dev/issues"
+    "url": "https://github.com/Gydo-Team/gydo.js/issues"
   },
-  "homepage": "https://github.com/Gydo-Team/gydo.js-dev#readme",
-  "types": "./typings/index.d.ts"
+  "homepage": "https://github.com/Gydo-Team/gydo.js#readme",
+  "types": "./typings/index.d.ts",
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  }
 }

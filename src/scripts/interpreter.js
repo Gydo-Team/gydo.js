@@ -14,76 +14,61 @@ class interpreter {
      * Interpreter
      * @param {Client} client
      */
-    constructor(client, prefix) {
-        const getPref = client.botprefix.get("prefix");
-        const s = getPref ? getPref : prefix;
-        
+    constructor(client) {
         if(client === null) throw new Error('Client Parameter has no value');
-
-        client.on("messageCreate", async (message) => {
+                
+        client.on('messageCreate', async (message) => {
+            const getPref = client.botprefix.get("prefix");
+            const s = getPref ? getPref : prefix;
+            
             const prefix = `${s}`;
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const command = args.shift().toLowerCase();
             
             // Raw Code
             const h = client.cmdcode.get(command);
-    
-            const cmdName = await client.commands.get(command)
+            
+            const cmdName = client.commands.get(command)
             if(!message.content.startsWith(prefix)) return;
             if(message.author.bot) return;
-                
+            
             const code = `${h}`
             this.code = code;
             this._author = message.author;
             this.args = args;
             this._message = message;
             this.currentCommand = cmdName;
+                
+            this.res = code;
             
-            let argNum;
-            let argRes;
-            
-            if(args.length && args.length > -1 && cmdName != undefined) { 
-                argNum = code.split("$[args;")[1].split("]")[0];
-    
-                argRes = args[argNum];
-            } else if (!args.length) {
-                argRes = "";
-            }
-            
-            this.res = await code
-            .replaceAll(`$[args;${argNum}]`, argRes)
-            
-            let interpret = await this._startInterpreter(client, message.author, args, message, cmdName);
+            // Start the Interpreter
+            await this._startInterpreter(client, message.author, args, message, cmdName);
             let res = await this.res;
             let EmbedResult = await this._getEmbed(client, command);
             if (EmbedResult === null) EmbedResult = [];
-            
-            const isReply = await this._isReply(command, client);
-
+                
+            const isReply = await this._isReply(cmdName, client);
+        
             // Sending the Message
-            try {
-                if(command === cmdName) {
-                    if(res === null || typeof res !== 'string' && res === undefined) return;
-                    
-                    if(isReply === false) {
-                        await message.channel.send({
-                            content: res,
-                            embeds: EmbedResult,
-                        });
-                    } else if(isReply === true) {
-                        await message.reply({
-                            content: res,
-                            embeds: EmbedResult,
-                        });
-                    } else {
-                        await message.channel.send({
-                            content: res,
-                            embeds: EmbedResult,
-                        });
-                    }
+            if(command === cmdName) {
+                if(res === null) return;
+                
+                if(isReply === false) {
+                    await message.channel.send({
+                        content: res,
+                        embeds: EmbedResult,
+                    });
+                } else if(isReply === true) {
+                    await message.reply({
+                        content: res,
+                        embeds: EmbedResult,
+                    });
+                } else {
+                    await message.channel.send({
+                        content: res,
+                        embeds: EmbedResult,
+                    });
                 }
-            } catch (err) {
-                console.error(err);
             }
         });
     }
@@ -160,11 +145,7 @@ class interpreter {
     _isReply(command, client) {
         let reply = client.cmdreply.get(command);
         
-        if (reply === true) {
-            return true;
-        } else if (reply === false && reply === null) {
-            return false;
-        } else return null;
+        return reply ? true : false;
     }
     
     /**
@@ -183,7 +164,7 @@ class interpreter {
             for (let x = functions.length - 1; x > 0; x--) {
                 if (typeof this.res !== 'string') return;
                 
-                const res = await require(`../funcs/${func}`)(client, this.res, author, args, message, currentCommand);
+                const res = await require(`../funcs/${func}`)(client, this.res, author, args, message, currentCommand, this.code);
 
                 this.res = await res ?? null;
             }

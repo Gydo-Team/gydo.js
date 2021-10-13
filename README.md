@@ -12,7 +12,7 @@
   <br />
 </div>
 
-# gydo.js
+# 📦 gydo.js
 
 'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.
 
@@ -44,11 +44,11 @@ npm install gydo.js
 ## Example Usage
 
 ```js 
-const gydo = require("gydo.js-dev");
+const gydo = require("gydo.js");
 const bot = new gydo.config({
     // change the <token here> to your bots token, same with the prefix (you can only do one prefix yet)
     token: "<token here>",
-    prefix: "<your prefix>"
+    prefix: "<your prefix>",
 });
 
 // Detect Messages
@@ -57,7 +57,7 @@ bot.MessageDetect();
 // Ping Command
 bot.cmd({
     name: "ping",
-    code: "Pong! | $[ping]ms'
+    code: "Pong! | $[ping]ms"
 });
 ```
 
@@ -69,35 +69,34 @@ Which is enough, and what is required.
 
 Once you've completed the setup, you can run `node .` (or `node <filename>.js`) in your terminal to run the bot.
 
+You can also turn off logging when a bot is logged in, or when a status is set in by setting the `logEvents` to `false`
+
 ## Commands
 
 **If you encounter any bugs, please report it to our** [Discord Server](https://discord.gg/s5UcwZTzKg)
-<br />
 
 **Before you put any commands put:**
-<br />
+
 ```js
 bot.MessageDetect()
 ```
-<br />
 
 For the command to **actually work**
 (Make sure to put it above the commands)
-<br />
 
-To create a command do: <br />
+To create a command do:
+
 ```js
 bot.cmd({
     name: "<cmd name>", 
     code: "<code>"
 });
 ```
-<br />
 
-Every command will start with your prefix like `?ping` <br />
+Every command will start with your prefix like `?ping` 
 
 **Example Command:**
-<br />
+
 ```js
 bot.cmd({ 
     name: "ping",

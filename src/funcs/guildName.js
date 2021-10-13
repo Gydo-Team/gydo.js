@@ -4,7 +4,7 @@
 const guildName = async (client, code, author, args, message) => {
     if (code === null) return;
     
-    const res = code.replaceAll("$[guildName]", message.guild.name)
+    const res = await code.replaceAll("$[guildName]", message.guild.name)
     
     return res;
 }

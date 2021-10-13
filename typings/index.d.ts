@@ -44,6 +44,7 @@ export class ActivityManager {
     public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): Presence[];
     public readonly normalStatus: string;
     public readonly currentStatus: string;
+    private readonly wantLogged: boolean;
 }
 
 export class SlashCommandManager {
@@ -70,7 +71,7 @@ export class Embed {
     private readonly embedTimestamp: boolean | null;
     private readonly embedAuthor: string | null;
     private readonly embedAuthorURL: string | null;
-    public static JSONtoEmbed(rawjson: JSON): MessageEmbed;
+    public static JSONtoEmbed(rawjson: JSON | object): MessageEmbed;
 }
 
 export class MessageUpdate extends Base {
@@ -85,9 +86,9 @@ export class ClientError extends EventEmitter {
 }
 
 export class interpreter {
-    public constructor(client: Client);
+    public constructor(client: Client, message: Message);
     private _getEmbed(client: Client, command: string): MessageEmbed | null;
-    private _isReply(command: string, client: Client): boolean | null;
+    private _isReply(command: string, client: Client): boolean;
     private readonly code: string;
     private readonly res: string;
     private readonly functions: string[] | null;
@@ -112,7 +113,12 @@ export class guildMemberAdd {
 }
 
 export class Util {
-    public static mention(target: string, mentionType: string ): string;
+    public static mention(target: string, mentionType: string): string;
+}
+
+export class InterpreterError extends Error {
+    public constructor(message: string, params: string);
+    public readonly name: string;
 }
 
 //#endregion
@@ -121,7 +127,6 @@ export class Util {
 export interface IConfig {
     token: string;
     prefix: string;
-    manualIntents?: boolean;
     logEvents?: boolean;
 }
 
@@ -215,7 +220,7 @@ export type ColorResolvable =
   | 'DARK_ORANGE'
   | 'DARK_RED'
   | 'DARK_GREY'
-  | 'LIGHT_GREY'
+  | 'LIGHT_GRE1qY'
   | 'DARK_NAVY'
   | 'BLURPLE'
   | 'GREYPLE'

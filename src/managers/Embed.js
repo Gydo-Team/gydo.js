@@ -38,33 +38,33 @@ class Embed {
     
     /** 
      * Discord Embed
-     * @param {string} cmd
+     * @param {string} target
      * @param {IEmbed} options
      */
-    constructor(cmd, options = { title, author, authorURL, description, footer, fields, color, timestamp }) {
+    constructor(target, options = { title, author, authorURL, description, footer, fields, color, timestamp }) {
         
-        if(!cmd) throw new Error('No Command Specified');
+        if(!target) throw new Error('No Command Specified');
 
         const { title, description, footer, fields, color, timestamp, author, authorURL } = options;
         
-        this.cmd = cmd
-        this.embedTitle = title
-        this.embedDesc = description
-        this.embedFooter = footer
-        this.embedFields = fields
-        this.embedColor = color
-        this.embedTimestamp = timestamp
-        this.embedAuthor = author
-        this.embedAuthorURL = authorURL
+        this.target = target;
+        this.embedTitle = title;
+        this.embedDesc = description;
+        this.embedFooter = footer;
+        this.embedFields = fields;
+        this.embedColor = color;
+        this.embedTimestamp = timestamp;
+        this.embedAuthor = author;
+        this.embedAuthorURL = authorURL;
         
-        client.embedTitle.set(cmd, title);
-        client.embedDesc.set(cmd, description);
-        client.embedFooter.set(cmd, footer);
-        client.embedFields.set(cmd, fields);
-        client.embedColor.set(cmd, color);
-        client.embedTimestamp.set(cmd, timestamp);
-        client.embedAuthor.set(cmd, author);
-        client.embedAuthorURL.set(cmd, authorURL);
+        client.embedTitle.set(target, title);
+        client.embedDesc.set(target, description);
+        client.embedFooter.set(target, footer);
+        client.embedFields.set(target, fields);
+        client.embedColor.set(target, color);
+        client.embedTimestamp.set(target, timestamp);
+        client.embedAuthor.set(target, author);
+        client.embedAuthorURL.set(target, authorURL);
     }
     
     /** 

@@ -21,4 +21,5 @@ module.exports = {
     Util: require('./utils/util'),
     Types: require('./utils/types'),
     RawClient: require('./utils/client'),
+    InterpreterError: require('./utils/InterpreterError'),
 };
