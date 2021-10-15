@@ -140,7 +140,7 @@ class interpreter {
      * If wether the command should reply on the message
      * @param {string} command The name of the command
      * @param {Client} client Client you are running
-     * @returns {boolean|null}
+     * @returns {boolean}
      */
     _isReply(command, client) {
         let reply = client.cmdreply.get(command);

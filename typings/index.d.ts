@@ -14,29 +14,12 @@ import {
     MessageEmbed,
     Base
 } from "discord.js";
+import { EventEmitter } from 'events';
 import {
     Snowflake,
 } from 'discord-api-types/v9'
 
 //#region Class(es)
-export class config {
-    public constructor (va: IConfig);
-    public readonly ping: number | null;
-    private readonly token: string;
-    public readonly prefix: string;
-    public readonly id: Snowflake | null;
-    public readonly tag: string | null;
-    public activity: ActivityManager;
-    public slashCommand: SlashCommandManager;
-    public guildMemberAdd(options: IGuildMember): void;
-    public guildMemberRemove(options: IGuildMember): void;
-    public MessageUpdate(options: IEvents): void;
-    public cmd(commandOptions: ICommand): void;
-    public MessageDetect(): void;
-    public onError(callback: any): string;
-    public toJSON(): JSON;
-}
-
 export class ActivityManager {
     public constructor(client: Client);
     public setActivity(status: string, options: ActivityTypes): Presence;
@@ -47,26 +30,31 @@ export class ActivityManager {
     private readonly wantLogged: boolean;
 }
 
-export class SlashCommandManager {
-    public constructor(client: Client);
-    public optionTypes: typeof Constants;
-    public detect(slashCommand: string): Message;
-    public create(command: ISlashCMD): void;
-    private readonly _slashName: string;
-    private readonly _slashDesc: string;
-    private readonly _slashCode: string;
-    private readonly _slashGuildId: string | Channel;
-    private readonly _slashOptions: ICMDSlashOptions[];
-    private readonly _slashEphemeral: boolean;
+export class config {
+    public constructor (va: IConfig);
+    public readonly ping: number | null;
+    private readonly token: string;
+    public readonly prefix: string;
+    public readonly id: Snowflake | null;
+    public readonly tag: string | null;
+    public activity: ActivityManager;
+    public slashCommand: SlashCommandManager;
+    public guildMemberAdd(options: GuildMemberOptions): void;
+    public guildMemberRemove(options: GuildMemberOptions): void;
+    public MessageUpdate(options: EventsOptions): void;
+    public cmd(commandOptions: ICommand): void;
+    public MessageDetect(): void;
+    public onError(callback: any): string;
+    public toJSON(): JSON;
 }
 
 export class Embed {
-    public constructor(target: string, options: IEmbed);
+    public constructor(target: string, options: EmbedStructure);
     private readonly target: string;
     private readonly embedTitle: string | null;
     private readonly embedDesc: string | null;
     private readonly embedFooter: string | null;
-    private readonly embedFields: IEmbedFields[] | null;
+    private readonly embedFields: EmbedFields[] | null;
     private readonly embedColor: string | null;
     private readonly embedTimestamp: boolean | null;
     private readonly embedAuthor: string | null;
@@ -74,11 +62,18 @@ export class Embed {
     public static JSONtoEmbed(rawjson: JSON | object): MessageEmbed;
 }
 
-export class MessageUpdate extends Base {
-    public constructor(options: IGuildMember);
-    public readonly message: string;
-    public readonly channel: Channel;
-    public toJSON(): JSON;
+export class EventsManager extends EventEmitter {}
+
+export class guildMemberAdd {
+    public constructor(channel: string, message: string, client: Client);
+    public message: string;
+    public channel: string;
+}
+
+export class guildMemberRemove {
+    public constructor(channel: string, message: string, client: Client);
+    public message: string;
+    public channel: string;
 }
 
 export class interpreter {
@@ -94,27 +89,33 @@ export class interpreter {
     private _startInterpreter(client: Client): string;
 }
 
-export class EventsManager extends EventEmitter {}
-
-export class guildMemberRemove {
-    public constructor(channel: string, message: string, client: Client);
-    public message: string;
-    public channel: string;
+export class InterpreterError extends Error {
+    public constructor(message: string, params: string);
+    public readonly name: string;
 }
 
-export class guildMemberAdd {
-    public constructor(channel: string, message: string, client: Client);
-    public message: string;
-    public channel: string;
+export class MessageUpdate extends Base {
+    public constructor(options: EventsOptions);
+    public readonly message: string;
+    public readonly channel: Channel;
+    public toJSON(): JSON;
 }
 
 export class Util {
     public static mention(target: string, mentionType: string): string;
 }
 
-export class InterpreterError extends Error {
-    public constructor(message: string, params: string);
-    public readonly name: string;
+export class SlashCommandManager {
+    public constructor(client: Client);
+    public optionTypes: typeof Constants;
+    public detect(slashCommand: string): Message;
+    public create(command: ISlashCMD): void;
+    private readonly _slashName: string;
+    private readonly _slashDesc: string;
+    private readonly _slashCode: string;
+    private readonly _slashGuildId: string | Channel;
+    private readonly _slashOptions: ICMDSlashOptions[];
+    private readonly _slashEphemeral: boolean;
 }
 
 //#endregion
@@ -126,12 +127,12 @@ export interface IConfig {
     logEvents?: boolean;
 }
 
-export interface IGuildMember {
+export interface GuildMemberOptions {
     channel: Channel;
     message: Message;
 }
 
-export interface IEvents {
+export interface EventsOptions {
     channel?: Channel;
     message?: Message;
 }
@@ -176,22 +177,22 @@ export interface ICMDSlashOptions {
     type?: typeof Constants;
 }
 
-export interface IEmbed {
+export interface EmbedStructure {
     title?: string;
     author?: string;
     authorURL?: string;
     description?: string;
     footer?: string;
-    fields?: IEmbedFields[];
+    fields?: EmbedFields[];
     color?: ColorResolvable;
     timestamp?: boolean;
 }
 
 // HexColorString from discord.js' Embeds
-export type HexColorString = `#${string}`;
+type HexColorString = `#${string}`;
 
 // ColorResolvable from discord.js' Embeds
-export type ColorResolvable =
+type ColorResolvable =
   | 'DEFAULT'
   | 'WHITE'
   | 'AQUA'
@@ -227,7 +228,7 @@ export type ColorResolvable =
   | number
   | HexColorString;
 
-export interface IEmbedFields {
+export interface EmbedFields {
     name?: string;
     value?: string;
     inline?: boolean;

@@ -83,7 +83,8 @@ bot.MessageDetect()
 ```
 
 For the command to **actually work**
-(Make sure to put it above the commands)
+
+Do not create multiple instances of `MessageDetect()` since it listens to events when Called
 
 To create a command do:
 

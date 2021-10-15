@@ -132,7 +132,7 @@ class config {
      * @param {string} options.message
      * @example bot.guildMemberAdd({
          channel: "1234567891011",
-         message: "{member} Welcome!"
+         message: "$[member] Welcome!"
      })
      */ 
     guildMemberAdd(options = {}) {
@@ -148,7 +148,7 @@ class config {
      * @param {string} options.message
      * @example bot.guildMemberAdd({
          channel: "1234567891011",
-         message: "Sad to see you leave {member}.."
+         message: "Sad to see you leave $[member.tag].."
      })
      */ 
     guildMemberRemove(options = {}) {
@@ -208,7 +208,14 @@ class config {
     }
     
     /**
+     * Error Callback
+     * @callback ClientErrorCB
+     * @param {*} err - The Error
+     */
+    
+    /**
      * When a client error occurs, the callback will be called
+     * @param {ClientErrorCB} callback
      */
     onError(callback) {
         client.on('error', (err) => callback(err));
