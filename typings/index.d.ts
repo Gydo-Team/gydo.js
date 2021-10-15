@@ -12,7 +12,9 @@ import {
     GuildMember,
     Role,
     MessageEmbed,
-    Base
+    Base,
+    Interaction,
+    Awaitable
 } from "discord.js";
 import { EventEmitter } from 'events';
 import {
@@ -32,19 +34,19 @@ export class ActivityManager {
 
 export class config {
     public constructor (va: IConfig);
-    public readonly ping: number | null;
-    private readonly token: string;
+    public readonly ping: number;
+    public readonly token: string;
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
-    public activity: ActivityManager;
+    public activity: ActivityManager<true>;
     public slashCommand: SlashCommandManager;
     public guildMemberAdd(options: GuildMemberOptions): void;
     public guildMemberRemove(options: GuildMemberOptions): void;
     public MessageUpdate(options: EventsOptions): void;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
-    public onError(callback: any): string;
+    public onError: (callback: any) => void;
     public toJSON(): JSON;
 }
 
@@ -62,7 +64,25 @@ export class Embed {
     public static JSONtoEmbed(rawjson: JSON | object): MessageEmbed;
 }
 
-export class EventsManager extends EventEmitter {}
+export interface SupportedClientEvents {
+    messageCreate: [message: Message];
+    interactionCreate: [interaction: Interaction];
+    ready: [client: Client<true>];
+}
+
+export class EventsManager extends EventEmitter {
+    public on<I extends keyof SupportedClientEvents>(
+        event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    public on<I extends string | symbol>(
+        event: Exclude<I, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
+    ): this;
+    public emit<I extends keyof SupportedClientEvents>(
+        event: I, ...args: SupportedClientEvents[I]
+    ): boolean;
+    public emit<E extends string | symbol>(
+        event: Exclude<E, keyof SupportedClientEvents>, ...args: unknown[]
+    ): boolean;
+}
 
 export class guildMemberAdd {
     public constructor(channel: string, message: string, client: Client);

@@ -42,8 +42,6 @@ class config {
      * });
      */
     constructor (options = {}) {
-        // const { token, prefix, logEvents } = options;
-        
         const { token, prefix, logEvents } = Object.defineProperties(options, {
             token: {
                 writable: true,
@@ -81,7 +79,7 @@ class config {
              * Bot's token
              * Never share your bot's token with anyone!
              * @type {?string}
-             * @private
+             * @readonly
              */
             this.token = token;
             

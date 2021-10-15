@@ -5,14 +5,14 @@ const fs = require('fs');
 const path = require('path');
 
 /** 
- * Interpreter 
+ * Message Event Interpreter 
  * Detects the messages and see if
  * it matches the command you made
  */
 class interpreter {
     /**
      * Interpreter
-     * @param {Client} client
+     * @param {Client} client - The Current Client that's running
      */
     constructor(client) {
         if(client === null) throw new Error('Client Parameter has no value');
