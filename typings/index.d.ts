@@ -39,14 +39,15 @@ export class config {
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
-    public activity: ActivityManager<true>;
+    public activity: ActivityManager;
     public slashCommand: SlashCommandManager;
+    public events: EventsManager;
     public guildMemberAdd(options: GuildMemberOptions): void;
     public guildMemberRemove(options: GuildMemberOptions): void;
     public MessageUpdate(options: EventsOptions): void;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
-    public onError: (callback: any) => void;
+    public onError(callback: (err: string) => void): void;
     public toJSON(): JSON;
 }
 
@@ -71,14 +72,12 @@ export interface SupportedClientEvents {
 }
 
 export class EventsManager extends EventEmitter {
-    public on<I extends keyof SupportedClientEvents>(
-        event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    public constructor();
+    public on<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
     public on<I extends string | symbol>(
         event: Exclude<I, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
     ): this;
-    public emit<I extends keyof SupportedClientEvents>(
-        event: I, ...args: SupportedClientEvents[I]
-    ): boolean;
+    public emit<I extends keyof SupportedClientEvents>(event: I, ...args: SupportedClientEvents[I]): boolean;
     public emit<E extends string | symbol>(
         event: Exclude<E, keyof SupportedClientEvents>, ...args: unknown[]
     ): boolean;
