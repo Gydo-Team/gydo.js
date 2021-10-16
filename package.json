@@ -1,6 +1,6 @@
 {
   "name": "gydo.js",
-  "version": "1.2.0-dev.ece8c7f0056d2d94a8914be75c8de591",
+  "version": "1.2.0-dev.8ca621cda950b6848f85c701bdd97a66",
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
   "exports": {
     ".": {

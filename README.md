@@ -41,12 +41,10 @@
 **Node v16.6.0 or later is required**
 
 ```sh-session
-npm install gydo.js
+npm install gydo.js discord.js
 ```
 
 ## Example Usage
-
-
 
 ```js 
 const gydo = require("gydo.js");
@@ -67,7 +65,9 @@ bot.cmd({
 ```
 
 You will automatically have this intents:
+
 `GUILDS`
+
 `GUILD_MESSAGES`
 
 Which is enough, and what is required.

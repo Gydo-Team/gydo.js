@@ -1,4 +1,5 @@
 'use strict';
+
 const discord = require('discord.js');
 const { Intents, Client, MessageEmbed, Constants, Collection } = require("discord.js");
 const intents = new Intents();
@@ -15,18 +16,20 @@ client.slashEphemeral = new Collection();
 client.cmdreply = new Collection();
 client.cmds = new Collection();
 
-const guildMemberAdd = require("../events/guildMemberAdd");
-const guildMemberRemove = require("../events/guildMemberRemove");
 const Interpreter = require("./interpreter");
 const { Message, Presence, Channel, User, GuildMember, Role } = require("discord.js");
 const { ApplicationCommandOptionTypes } = Constants;
 const ActivityManager = require("../managers/ActivityManager");
 const SlashCommandManager = require('../managers/SlashCommandManager');
 const SaveEmbed = require('../utils/embed');
-const MessageUpdate = require('../events/MessageUpdate');
 const EventsManager = require('../managers/EventsManager');
+const BaseBot = require('../managers/BaseBot');
 
-class Bot {
+/**
+ * Bot/Client class for Discord Bots
+ * @extends {BaseBot}
+ */
+class Bot extends BaseBot {
     /**
      * 
      * Simple and needed setup to start the bot
@@ -42,6 +45,7 @@ class Bot {
      * });
      */
     constructor (options = {}) {
+        super(client);
         const { token, prefix, logEvents } = Object.defineProperties(options, {
             token: {
                 writable: true,
@@ -108,7 +112,7 @@ class Bot {
          * Activity of your Discord Bot
          * @type {ActivityManager}
          */
-        this.activity = new ActivityManager(wantLogged);
+        this.activity = new ActivityManager(this);
         
         /**
          * Slash Commands
@@ -127,51 +131,6 @@ class Bot {
          * @type {Client}
          */
         this.botClient = client;
-    }
-    
-    /**
-     * A Welcome Message (guildMemberAdd Event)
-     * Requires a channel id to return the message
-     * @param {string} options.channel
-     * @param {string} options.message
-     * @example bot.guildMemberAdd({
-         channel: "1234567891011",
-         message: "$[member] Welcome!"
-     })
-     */ 
-    guildMemberAdd(options = {}) {
-        const channel = Object.defineProperty(options, 'channel', { writable: true });
-        const message = Object.defineProperty(options, 'message', { writable: true });
-        
-        new guildMemberAdd(channel, message, client);
-    }
-    
-    /**
-     * A leave message (guildMemberRemove Event)
-     * @param {string} options.channel
-     * @param {string} options.message
-     * @example bot.guildMemberAdd({
-         channel: "1234567891011",
-         message: "Sad to see you leave $[member.tag].."
-     })
-     */ 
-    guildMemberRemove(options = {}) {
-        const channel = Object.defineProperty(options, 'channel', { writable: true });
-        const message = Object.defineProperty(options, 'message', { writable: true });
-        
-        new guildMemberRemove(channel, message, client);
-    }
-    
-    /**
-     * Executes the command if any when a message is updated
-     * @param {Channel|string} options.channel
-     * @param {Message|string} options.message
-     */
-    MessageUpdate(options = {}) {
-        new MessageUpdate({
-            channel: options.channel,
-            message: options.message
-        });
     }
 
     /**
@@ -223,10 +182,6 @@ class Bot {
      */
     onError(callback) {
         client.on('error', (err) => callback(err));
-    }
-    
-    toJSON() {
-        return client.toJSON();
     }
 }
 

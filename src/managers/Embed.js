@@ -11,7 +11,6 @@ client.embedColor = new discord.Collection();
 client.embedTimestamp = new discord.Collection();
 client.embedAuthor = new discord.Collection();
 client.embedAuthorURL = new discord.Collection();
-client.doesEmbed = new discord.Collection();
 
 /**
  * Discord Message Embed

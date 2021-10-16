@@ -22,8 +22,8 @@ import {
 } from 'discord-api-types/v9'
 
 //#region
-export class ActivityManager {
-    public constructor(client: Client);
+export class ActivityManager<T> {
+    public constructor(data: T);
     public setActivity(status: string, options: ActivityTypes): void;
     public setUserStatus(status: NormalStatusTypes): void;
     public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): void;
@@ -32,24 +32,29 @@ export class ActivityManager {
     private readonly wantLogged: boolean;
 }
 
-export class Bot {
+export class Bot extends BaseBot {
     public constructor (va: BotOptions);
     public readonly ping: number;
     public readonly token: string;
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
-    public activity: ActivityManager;
+    public activity: ActivityManager<Client>;
     public slashCommand: SlashCommandManager;
     public events: EventsManager;
-    public guildMemberAdd(options: GuildMemberOptions): void;
-    public guildMemberRemove(options: GuildMemberOptions): void;
-    public MessageUpdate(options: EventsOptions): void;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
     public onError(callback: (err: Error) => void): void;
     public botClient: Client<true>;
     public toJSON(): JSON;
+}
+
+export class BaseBot {
+    public constructor(client: Client);
+    private client: Client;
+    public guildMemberAdd(options: GuildMemberOptions): void;
+    public guildMemberRemove(options: GuildMemberOptions): void;
+    public MessageUpdate(options: EventsOptions): void;
 }
 
 export class Embed {
@@ -76,13 +81,21 @@ export interface SupportedClientEvents {
 export class EventsManager extends EventEmitter {
     public constructor();
     public on<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    
     public on<O extends string | symbol>(
         event: Exclude<O, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
     ): this;
+    
     public emit<I extends keyof SupportedClientEvents>(event: I, ...args: SupportedClientEvents[I]): boolean;
     public emit<E extends string | symbol>(
         event: Exclude<E, keyof SupportedClientEvents>, ...args: unknown[]
     ): boolean;
+    
+    public off<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    
+    public off<O extends string | symbol>(
+        event: Exclude<O, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
+    ): this;
 }
 
 export class guildMemberAdd {

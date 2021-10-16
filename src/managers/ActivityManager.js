@@ -4,15 +4,18 @@ const client = require('../utils/client');
 const chalk = require('chalk');
 
 /** 
- * All Activity functions
-*/
+ * Activity/Presence Managing
+ */
 class ActivityManager {
-    constructor(wantLogged) {
+    /**
+     * @param {Client|object} data - The Data of the Client or if an object it must have a wantLogged boolean
+     */
+    constructor(data) {
         /**
          * If you want it to be logged
          * @private
          */
-        this.wantLogged = wantLogged;
+        this.wantLogged = data.wantLogged;
     }
     
     /** 
