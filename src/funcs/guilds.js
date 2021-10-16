@@ -21,6 +21,12 @@ const guildName = async (client, code, author, args, message) => {
     // Description of the Guild, if any
     .replaceAll("$[guild.description]", message.guild.description)
     
+    // The user id of the Guild's Owner
+    .replaceAll("$[guild.ownerId]", message.guild.ownerId)
+    
+    // Whether the server is.partnered or not
+    .replaceAll("$[guild.isPartnered]", message.guild.partnered)
+    
     return res;
 }
 

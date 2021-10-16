@@ -26,7 +26,7 @@ const SaveEmbed = require('../utils/embed');
 const MessageUpdate = require('../events/MessageUpdate');
 const EventsManager = require('../managers/EventsManager');
 
-class config {
+class Bot {
     /**
      * 
      * Simple and needed setup to start the bot
@@ -36,7 +36,7 @@ class config {
      * @example
      * // Example
      * const gydo = require("gydo.js-dev");
-     * const bot = new gydo.config({ 
+     * const bot = new gydo.Bot({ 
      *     token: "TOKEN",
      *     prefix: "!"
      * });
@@ -214,7 +214,7 @@ class config {
     /**
      * Error Callback
      * @callback ClientError
-     * @param {*} err - The Error
+     * @param {Error} err
      */
     
     /**
@@ -230,4 +230,4 @@ class config {
     }
 }
 
-module.exports = config;
+module.exports = Bot;

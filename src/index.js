@@ -2,7 +2,7 @@
 
 module.exports = {
     // Main Classes/Functions
-    config: require("./scripts/main"),
+    Bot: require("./scripts/main"),
     Embed: require('./managers/Embed'),
     interpreter: require('./scripts/interpreter'),
     

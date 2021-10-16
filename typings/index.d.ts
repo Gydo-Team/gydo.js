@@ -32,7 +32,7 @@ export class ActivityManager {
     private readonly wantLogged: boolean;
 }
 
-export class config {
+export class Bot {
     public constructor (va: BotOptions);
     public readonly ping: number;
     public readonly token: string;

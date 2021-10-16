@@ -36,6 +36,8 @@
 
 ## Installation
 
+⚠️ We have changed `config` class to `Bot`
+
 **Node v16.6.0 or later is required**
 
 ```sh-session
@@ -44,9 +46,11 @@ npm install gydo.js
 
 ## Example Usage
 
+
+
 ```js 
 const gydo = require("gydo.js");
-const bot = new gydo.config({
+const bot = new gydo.Bot({
     // change the <token here> to your bots token, same with the prefix (you can only do one prefix yet)
     token: "<token here>",
     prefix: "<your prefix>",
