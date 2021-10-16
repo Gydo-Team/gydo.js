@@ -25,7 +25,6 @@ class ActivityManager {
      * Sets the Status for the Bot
      * @param {string|Presence} status
      * @param {ActivityTypes} options 
-     * @returns {Presence}
      */
     setActivity(status, options = { type, url }) {
         /**
@@ -43,10 +42,6 @@ class ActivityManager {
             if(this.wantLogged === true) console.log(chalk.blue(`Bot's status set to: ${this.currentStatus}`));
         });
     }
-    
-    /** 
-     * @typedef {"idle"|"dnd"|"invisible"|"online"} NormalStatusTypes
-     */
 
     // This is not like the other Status method, this is just a normal status
     // Like Idle, Do not Disturb, etc.
@@ -55,7 +50,7 @@ class ActivityManager {
      * @param {NormalStatusTypes} status
      */
     setUserStatus(status) {
-        if(typeof status != 'string') throw new TypeError(`Status NOT a string`);
+        if(typeof status !== 'string') throw new TypeError(`Status NOT a string`);
         
         /**
         * Normal User Status
@@ -71,7 +66,7 @@ class ActivityManager {
     
     /**
      * A Loop Status for your Discord Bot
-     * @param {string[]|Array<string>} arrayOfStatus
+     * @param {string[]} arrayOfStatus
      * @param {number} time
      * @param {ActivityTypes} type
      * @example bot.loopStatus(["Hey!", "Hello!", "!help"], 2000, { type: "PLAYING" })

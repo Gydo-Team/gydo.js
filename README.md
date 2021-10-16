@@ -111,7 +111,11 @@ bot.cmd({
 
 `$[author.tag]` - Author's User Tag of the message
 
+**Not all functions are mentioned here,** you can see the new functions that got added on our [GitHub Repo](https://github.com/Gydo-Team/gydo.js)
+
 **Args**
+
+An Array of Strings, if arguments exist on a message
 
 `$[args;<num>]`
 
@@ -221,6 +225,7 @@ It must be on an Array, otherwise it'll send an error.
 The Second Argument (or the time) is in Miliseconds (1000 = 1 second), and you can't go below 1000 ms, or it'll send an error.
 
 Status Types are:
+
 `PLAYING`, 
 
 `LISTENING`, 
@@ -318,7 +323,7 @@ bot.MessageUpdate({
 
 # Callbacks
 
-## ClientError
+## Client Error
 
 **Usage:**
 

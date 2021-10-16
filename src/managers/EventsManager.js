@@ -11,17 +11,17 @@ class EventsManager extends EventEmitter {
      */
     constructor() {
         super();
-        client.on('ready', () => {
-            this.emit('ready');
+        client.on('ready', (client) => {
+            this.emit('ready', client);
         });
         
         client.on('messageCreate', (message) => {
             this.emit('messageCreate', message);
         });
         
-        client.on('interactionCreate', (interaction) => {
-            this.emit('interactionCreate', interaction);
-        });
+        client.on('interactionCreate', (interaction) => this.emit('interactionCreate', interaction));
+        
+        client.on('error', (err) => this.emit('error', err));
     }
 }
 

@@ -156,12 +156,12 @@ class interpreter {
     async _startInterpreter(client, author, args, message, currentCommand) {
         const funcs = fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));
         
-        this.functions = this.code.split("$");
+        this.functions = this.code.split("$[");
 
         const functions = this.functions
 
         for await (const func of funcs) {
-            for (let x = functions.length - 1; x > 0; x--) {
+            for (let i = functions.length - 1; i > 0; i--) {
                 if (typeof this.res !== 'string') return;
                 
                 const res = await require(`../funcs/${func}`)(client, this.res, author, args, message, currentCommand, this.code);

@@ -14,8 +14,8 @@ client.embedAuthorURL = new discord.Collection();
 client.doesEmbed = new discord.Collection();
 
 /**
-* Discord Message Embed
-*/
+ * Discord Message Embed
+ */
 class Embed {
     /** 
      * @typedef {object} IEmbed

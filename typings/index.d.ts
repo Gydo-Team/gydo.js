@@ -1,39 +1,39 @@
 // Imports 
-import { 
+import {
+    Awaitable,
+    Base,
     Client,
     ClientUser,
-    Message,
-    Presence,
     Channel,
     ClientPresenceStatus,
-    Intents,
     Constants,
+    Intents,
+    Message,
+    Presence,
     User,
     GuildMember,
     Role,
     MessageEmbed,
-    Base,
-    Interaction,
-    Awaitable
+    Interaction
 } from "discord.js";
 import { EventEmitter } from 'events';
 import {
     Snowflake,
 } from 'discord-api-types/v9'
 
-//#region Class(es)
+//#region
 export class ActivityManager {
     public constructor(client: Client);
-    public setActivity(status: string, options: ActivityTypes): Presence;
-    public setUserStatus(status: NormalStatusTypes): Presence;
-    public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): Presence[];
+    public setActivity(status: string, options: ActivityTypes): void;
+    public setUserStatus(status: NormalStatusTypes): void;
+    public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): void;
     public readonly normalStatus: string;
     public readonly currentStatus: string;
     private readonly wantLogged: boolean;
 }
 
 export class config {
-    public constructor (va: IConfig);
+    public constructor (va: BotOptions);
     public readonly ping: number;
     public readonly token: string;
     public readonly prefix: string;
@@ -47,7 +47,8 @@ export class config {
     public MessageUpdate(options: EventsOptions): void;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
-    public onError(callback: (err: string) => void): void;
+    public onError(callback: (err: Error) => void): void;
+    public botClient: Client<true>;
     public toJSON(): JSON;
 }
 
@@ -69,13 +70,14 @@ export interface SupportedClientEvents {
     messageCreate: [message: Message];
     interactionCreate: [interaction: Interaction];
     ready: [client: Client<true>];
+    error: [err: Error];
 }
 
 export class EventsManager extends EventEmitter {
     public constructor();
     public on<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
-    public on<I extends string | symbol>(
-        event: Exclude<I, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
+    public on<O extends string | symbol>(
+        event: Exclude<O, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
     ): this;
     public emit<I extends keyof SupportedClientEvents>(event: I, ...args: SupportedClientEvents[I]): boolean;
     public emit<E extends string | symbol>(
@@ -96,7 +98,7 @@ export class guildMemberRemove {
 }
 
 export class interpreter {
-    public constructor(client: Client, message: Message);
+    public constructor(client: Client);
     private _getEmbed(client: Client, command: string): MessageEmbed | null;
     private _isReply(command: string, client: Client): boolean;
     private readonly code: string;
@@ -116,7 +118,7 @@ export class InterpreterError extends Error {
 export class MessageUpdate extends Base {
     public constructor(options: EventsOptions);
     public readonly message: string;
-    public readonly channel: Channel;
+    public readonly channel: string;
     public toJSON(): JSON;
 }
 
@@ -127,20 +129,20 @@ export class Util {
 export class SlashCommandManager {
     public constructor(client: Client);
     public optionTypes: typeof Constants;
-    public detect(slashCommand: string): Message;
+    public detect(slashCommand: string): void;
     public create(command: ISlashCMD): void;
     private readonly _slashName: string;
     private readonly _slashDesc: string;
     private readonly _slashCode: string;
     private readonly _slashGuildId: string | Channel;
-    private readonly _slashOptions: ICMDSlashOptions[];
+    private readonly _slashOptions: object;
     private readonly _slashEphemeral: boolean;
 }
 
 //#endregion
 
-//#region Interfaces and Types
-export interface IConfig {
+//#region
+export interface BotOptions {
     token: string;
     prefix: string;
     logEvents?: boolean;
@@ -236,7 +238,7 @@ type ColorResolvable =
   | 'DARK_ORANGE'
   | 'DARK_RED'
   | 'DARK_GREY'
-  | 'LIGHT_GRE1qY'
+  | 'LIGHT_GREY'
   | 'DARK_NAVY'
   | 'BLURPLE'
   | 'GREYPLE'

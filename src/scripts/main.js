@@ -32,7 +32,7 @@ class config {
      * Simple and needed setup to start the bot
      * @param {string} options.token
      * @param {string} options.prefix
-     * @param {boolean} logEvents If you want to log the events on what ks happening on the bot
+     * @param {boolean} options.logEvents If you want to log the events on what is happening on the bot
      * @example
      * // Example
      * const gydo = require("gydo.js-dev");
@@ -121,6 +121,12 @@ class config {
          * @type {EventsManager}
          */
         this.events = new EventsManager();
+        
+        /**
+         * The Raw Properties of the bot that is currently running. Meaning the not simplified Client that is currently running, if any
+         * @type {Client}
+         */
+        this.botClient = client;
     }
     
     /**
@@ -207,13 +213,13 @@ class config {
     
     /**
      * Error Callback
-     * @callback ClientErrorCB
+     * @callback ClientError
      * @param {*} err - The Error
      */
     
     /**
      * When a client error occurs, the callback will be called
-     * @param {ClientErrorCB} callback
+     * @param {ClientError} callback
      */
     onError(callback) {
         client.on('error', (err) => callback(err));
