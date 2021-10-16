@@ -3,7 +3,6 @@
 module.exports = {
     // Main Classes/Functions
     Bot: require("./scripts/main"),
-    Embed: require('./managers/Embed'),
     interpreter: require('./scripts/interpreter'),
     
     // Events
@@ -12,8 +11,10 @@ module.exports = {
     guildMemberAdd: require('./events/guildMemberAdd'),
     
     // Managers
+    BaseBot: require('./managers/BaseBot'),
     EventsManager: require('./managers/EventsManager'),
     ActivityManager: require("./managers/ActivityManager"),
+    Embed: require('./managers/Embed'),
     SlashCommandManager: require('./managers/SlashCommandManager'),
     
     // Utils

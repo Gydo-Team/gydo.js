@@ -42,7 +42,7 @@ class ActivityManager {
         
         client.on("ready", async () => {
             client.user.setActivity(this.currentStatus, { type: options.type, url: options.url || null })
-            if(this.wantLogged === true) console.log(chalk.blue(`Bot's status set to: ${this.currentStatus}`));
+            if(this.wantLogged === false) console.log(chalk.blue(`Bot's status set to: ${this.currentStatus}`));
         });
     }
 

@@ -78,6 +78,7 @@ class interpreter {
      * @param {Client} client The Client you are running
      * @param {string} command The name of the command
      * @returns {MessageEmbed[]|null}
+     * @private
      */
     _getEmbed(client, command) {
         // Raw Embed Values
@@ -141,6 +142,7 @@ class interpreter {
      * @param {string} command The name of the command
      * @param {Client} client Client you are running
      * @returns {boolean}
+     * @private
      */
     _isReply(command, client) {
         let reply = client.cmdreply.get(command);
@@ -152,6 +154,7 @@ class interpreter {
      * Starts the Interpreter
      * @param {Client} client
      * @returns {string}
+     * @private
      */
     async _startInterpreter(client, author, args, message, currentCommand) {
         const funcs = fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));

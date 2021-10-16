@@ -36,7 +36,7 @@
 
 ## Installation
 
-⚠️ We have changed `config` class to `Bot`
+⚠️ **We have changed** `config` **class to** `Bot`
 
 **Node v16.6.0 or later is required**
 
@@ -165,11 +165,11 @@ bot.slashCommand.create({
 });
 ```
 
-You can also put `{ping}` inside `code: ""` to get the bots ping.
+You can also put `$[ping]` inside the `code` property to get the bots ping.
 
 If you want your slash command to only be created on a specific server, then you can put the server's guild ID in `guildId`
 
-If you want it so only the user who created the interaction can see it, add the property in `slashCommand.create({})`: `ephemeral: true`
+If you want it so only the user who created the interaction can see it, add the property in the `create()` method `ephemeral: true`
 
 To detect the slash command:
 

@@ -55,10 +55,35 @@ class BaseBot {
      * @param {Message|string} options.message
      */
     MessageUpdate(options = {}) {
-        new MessageUpdate({
-            channel: options.channel,
-            message: options.message
-        });
+        new MessageUpdate(options.channel, options.message, this.client);
+    }
+    
+    /**
+     * Error Callback
+     * @callback ClientError
+     * @param {Error} err
+     */
+    
+    /**
+     * When a client error occurs, the callback will be called
+     * @param {ClientError} callback
+     */
+    onError(callback) {
+        this.client.on('error', (err) => callback(err));
+    }
+    
+    /**
+     * Ready State Callback
+     * @callback {BotReady}
+     * @param {Client} client
+     */
+     
+    /**
+     * Will get called when the Bot is Ready
+     * @param {BotReady} cb
+     */
+    onReady(cb) {
+        this.client.on('ready', () => cb())
     }
     
     toJSON() {

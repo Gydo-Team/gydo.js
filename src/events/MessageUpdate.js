@@ -1,20 +1,16 @@
 'use strict';
 
-const client = require('../utils/client');
-const { Channel, Base } = require('discord.js');
-
 /**
-* Event for a when Message is Updated
-* @extends {Base}
-*/
-class MessageUpdate extends Base {
+ * Event for a when Message is Updated
+ */
+class MessageUpdate {
     /**
-    * Message Update Event
-    * @param {string|Channel} channel
-    * @param {string} message
-    */
-    constructor({ channel, message }) {
-        super(client);
+     * Message Update Event
+     * @param {string|Channel} channel
+     * @param {string} message
+     */
+    constructor(channel, message, client) {
+        if(client === null) throw new Error('Client Parameter cannot be null or undefined')
         
         if(!channel) throw new Error(`Channel cannot be empty`);
         if(!message) throw new Error(`Message cannot be empty`);
@@ -42,14 +38,11 @@ class MessageUpdate extends Base {
         });
     }
     
-    /**
-    * @returns {JSON}
-    */
     toJSON() {
-        return super.toJSON({
+        return {
             message: this.message,
             channel: this.channel,
-        });
+        };
     }
 }
 

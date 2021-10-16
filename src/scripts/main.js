@@ -77,7 +77,7 @@ class Bot extends BaseBot {
 
         client.login(token);
         client.once('ready', async () => {
-            if (wantLogged === true || !wantLogged) console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
+            if (wantLogged !== false) console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
             
             /** 
              * Bot's token
@@ -118,7 +118,7 @@ class Bot extends BaseBot {
          * Slash Commands
          * @type {SlashCommandManager}
          */
-        this.slashCommand = new SlashCommandManager();
+        this.slashCommand = new SlashCommandManager(this);
         
         /**
          * Events Manager for manual Events Managing
@@ -168,20 +168,6 @@ class Bot extends BaseBot {
      */
     MessageDetect() {
         new Interpreter(client);
-    }
-    
-    /**
-     * Error Callback
-     * @callback ClientError
-     * @param {Error} err
-     */
-    
-    /**
-     * When a client error occurs, the callback will be called
-     * @param {ClientError} callback
-     */
-    onError(callback) {
-        client.on('error', (err) => callback(err));
     }
 }
 

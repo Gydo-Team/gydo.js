@@ -39,14 +39,12 @@ export class Bot extends BaseBot {
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
-    public activity: ActivityManager<Client>;
+    public activity: ActivityManager<this>;
     public slashCommand: SlashCommandManager;
     public events: EventsManager;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
-    public onError(callback: (err: Error) => void): void;
     public botClient: Client<true>;
-    public toJSON(): JSON;
 }
 
 export class BaseBot {
@@ -55,6 +53,9 @@ export class BaseBot {
     public guildMemberAdd(options: GuildMemberOptions): void;
     public guildMemberRemove(options: GuildMemberOptions): void;
     public MessageUpdate(options: EventsOptions): void;
+    public onError(callback: (err: Error) => void): void;
+    public onReady(cb: (client: Client<true>) => Awaitable<void>): void;
+    public toJSON(): JSON;
 }
 
 export class Embed {
@@ -128,11 +129,11 @@ export class InterpreterError extends Error {
     public readonly name: string;
 }
 
-export class MessageUpdate extends Base {
-    public constructor(options: EventsOptions);
+export class MessageUpdate {
+    public constructor(channel: Channel, message: Message, client: Client);
     public readonly message: string;
     public readonly channel: string;
-    public toJSON(): JSON;
+    public toJSON(): object;
 }
 
 export class Util {

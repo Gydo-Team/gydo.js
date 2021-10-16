@@ -1,5 +1,4 @@
 'use strict';
-const client = require('../utils/client');
 const { Constants } = require('discord.js');
 const { ApplicationCommandOptionTypes } = Constants;
 
@@ -7,6 +6,9 @@ const { ApplicationCommandOptionTypes } = Constants;
  * Discord Slash Commands
  */
 class SlashCommandManager {
+    /**
+     * Manager for Slash Commands
+     */
     constructor(client) {
         this.client = client;
         
@@ -21,6 +23,7 @@ class SlashCommandManager {
      * @param {string} slashCommand
      */
     detect(slashCommand) {
+        const client = this.client;
         client.on("interactionCreate", async (interaction) => {
             if(!interaction.isCommand()) return;
             
@@ -30,7 +33,7 @@ class SlashCommandManager {
             const cmdName = client.slashName.get(slashCommand);
             const s = `${r}`
             const res = await s
-            .replace(`{ping}`, client.ws.ping)
+            .replace(`$[ping]`, client.ws.ping)
             
             const ephemeralCMD = client.slashEphemeral.get(cmdName);
             
@@ -76,6 +79,7 @@ class SlashCommandManager {
      * @param {ISlashCMD} command
      */
     create(command = { name, description, code, ephemeral, guildId, options }) {
+        const client = this.client;
         if(!command.name) throw new Error(`No Slash Command Name`);
         if(!command.description) throw new Error(`No Slash Command Description`);
         if(!command.code) throw new Error(`No Slash Command Code`);
