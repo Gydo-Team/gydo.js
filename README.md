@@ -300,7 +300,7 @@ Functions:
 
 ## Message Update
 
-`MessageUpdate` _**extends**_ [Base](https://discord.js.org/#/docs/main/stable/class/Base)
+`MessageUpdate`
 
 **Example:**
 

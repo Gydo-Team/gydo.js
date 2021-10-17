@@ -63,11 +63,6 @@ class interpreter {
                         content: res,
                         embeds: EmbedResult,
                     });
-                } else {
-                    await message.channel.send({
-                        content: res,
-                        embeds: EmbedResult,
-                    });
                 }
             }
         });
@@ -91,37 +86,25 @@ class interpreter {
         const RawEmbedAuthor = client.embedAuthor.get(command);
         const RawEmbedAuthorURL = client.embedAuthorURL.get(command);
             
-        let EmbedRaw;
+        let EmbedRaw = new MessageEmbed();
         let EmbedResult;
             
         if (RawEmbedTitle != undefined && RawEmbedDescription != undefined) {
-            EmbedRaw = new MessageEmbed();
-                
-            if (RawEmbedTitle) {
-                EmbedRaw.setTitle(RawEmbedTitle.toString());
-            }   
+            if (RawEmbedTitle) EmbedRaw.setTitle(RawEmbedTitle.toString());
             
-            if (RawEmbedDescription) {
-                EmbedRaw.setDescription(RawEmbedDescription.toString());
-            }
+            if (RawEmbedDescription) EmbedRaw.setDescription(RawEmbedDescription.toString());
             
-            if (RawEmbedFooter) {
-                EmbedRaw.setFooter(RawEmbedFooter.toString());
-            }
+            if (RawEmbedFooter) EmbedRaw.setFooter(RawEmbedFooter.toString());
             
             if (RawEmbedFields) {
-                for(let i = 0; i < RawEmbedFields.length; i++) {
-                    EmbedRaw.addField(RawEmbedFields[i].name, RawEmbedFields[i].value, RawEmbedFields[i].inline);
-                }
+                const EmbedFields = RawEmbedFields.map(x => {
+                    EmbedRaw.addField(RawEmbedFields[x].name, RawEmbedFields[x].value, RawEmbedFields[x].inline);
+                });
             }
             
-            if (RawEmbedColor) {
-                EmbedRaw.setColor(RawEmbedColor.toString());
-            }
+            if (RawEmbedColor) EmbedRaw.setColor(RawEmbedColor.toString());
             
-            if (RawEmbedTimestamp && RawEmbedTimestamp == true) {
-                EmbedRaw.setTimestamp();
-            }
+            if (RawEmbedTimestamp && RawEmbedTimestamp == true) EmbedRaw.setTimestamp();
             
             if (RawEmbedAuthor) {
                 let hasAuthorURL;
@@ -132,9 +115,7 @@ class interpreter {
             }
             
             return EmbedResult = [EmbedRaw];
-        } else { 
-            return EmbedResult = [];
-        }
+        } else return EmbedResult = [];
     }
     
     /**

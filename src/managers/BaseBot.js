@@ -83,7 +83,7 @@ class BaseBot {
      * @param {BotReady} cb
      */
     onReady(cb) {
-        this.client.on('ready', () => cb())
+        this.client.on('ready', (c) => cb(c));
     }
     
     toJSON() {

@@ -10,7 +10,7 @@ class SlashCommandManager {
      * Manager for Slash Commands
      */
     constructor(client) {
-        this.client = client;
+        this.botClient = client;
         
         /** 
         * Slash Command Option types (DJS)
