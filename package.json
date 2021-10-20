@@ -1,6 +1,6 @@
 {
   "name": "gydo.js",
-  "version": "1.3.0-dev.938222e8a577546763f200ddae666ed3",
+  "version": "1.3.0-dev.6c5abbfca038ae6a14ed427053bc381a",
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
   "exports": {
     ".": {
@@ -24,6 +24,7 @@
   "author": "John Heinrich",
   "license": "Apache-2.0",
   "dependencies": {
+    "@gydojs/cmdhandler": "^0.0.3",
     "chalk": "^4.1.1",
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.2.0",

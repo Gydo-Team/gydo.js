@@ -1,6 +1,7 @@
 const guildMemberAdd = require("../events/guildMemberAdd");
 const guildMemberRemove = require("../events/guildMemberRemove");
 const MessageUpdate = require('../events/MessageUpdate');
+const guildBanAdd = require('../events/guildBanAdd');
 
 /**
  * Base Class of the Class Bot, all events goes here
@@ -84,6 +85,15 @@ class BaseBot {
      */
     onReady(cb) {
         this.client.on('ready', (c) => cb(c));
+    }
+    
+    /**
+     * Listens for when a member is banned from a server
+     * @param {string} channel
+     * @param {string} message
+     */
+    guildBanAdd(channel, message) {
+        guildBanAdd(this.client, channel, message);
     }
     
     toJSON() {

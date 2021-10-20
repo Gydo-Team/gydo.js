@@ -2,8 +2,9 @@
 
 module.exports = {
     // Main Classes/Functions
-    Bot: require("./scripts/main"),
-    interpreter: require('./scripts/interpreter'),
+    Bot: require("./bot/main"),
+    interpreter: require('./bot/interpreter'),
+    CommandHandler: require('@gydojs/cmdhandler'),
     
     // Events
     MessageUpdate: require('./events/MessageUpdate'),

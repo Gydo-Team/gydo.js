@@ -33,7 +33,7 @@ class ActivityManager {
         /**
          * Bot's Current Status, if you have set one.
          * @type {?string}
-        */
+         */
         this.currentStatus = status;
         
         if(!this.currentStatus) throw new Error(`No Status Given`)
@@ -56,9 +56,9 @@ class ActivityManager {
         if(typeof status !== 'string') throw new TypeError(`Status NOT a string`);
         
         /**
-        * Normal User Status
-        * @type {?string}
-        */
+         * Normal User Status
+         * @type {?string}
+         */
         this.normalStatus = status;
         
         client.once('ready', async () => {

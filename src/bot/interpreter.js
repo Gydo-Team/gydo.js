@@ -98,7 +98,7 @@ class interpreter {
             
             if (RawEmbedFields) {
                 const EmbedFields = RawEmbedFields.map(x => {
-                    EmbedRaw.addField(RawEmbedFields[x].name, RawEmbedFields[x].value, RawEmbedFields[x].inline);
+                    EmbedRaw.addField(x.name, x.value, x.inline);
                 });
             }
             
