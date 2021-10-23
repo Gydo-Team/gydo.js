@@ -23,7 +23,7 @@ const ActivityManager = require("../managers/ActivityManager");
 const SlashCommandManager = require('../managers/SlashCommandManager');
 const SaveEmbed = require('../utils/embed');
 const EventsManager = require('../managers/EventsManager');
-const BaseBot = require('../managers/BaseBot');
+const BaseBot = require('./BaseBot');
 
 /**
  * Bot/Client class for Discord Bots

@@ -15,7 +15,7 @@ class interpreter {
      * @param {Client} client - The Current Client that's running
      */
     constructor(client) {
-        if(client === null) throw new Error('Client Parameter has no value');
+        if(!client instanceof Client || !client) throw new Error('Client Parameter has no value');
                 
         client.on('messageCreate', async (message) => {
             const getPref = client.botprefix.get("prefix");
@@ -50,20 +50,25 @@ class interpreter {
             const isReply = await this._isReply(cmdName, client);
         
             // Sending the Message
-            if(command === cmdName) {
-                if(res === null) return;
-                
-                if(isReply === false) {
-                    await message.channel.send({
-                        content: res,
-                        embeds: EmbedResult,
-                    });
-                } else if(isReply === true) {
-                    await message.reply({
-                        content: res,
-                        embeds: EmbedResult,
-                    });
+            try {
+                if(command === cmdName) {
+                    if(res === null) return;
+                    
+                    if(isReply === false || !isReply) {
+                        await message.channel.send({
+                            content: res,
+                            embeds: EmbedResult,
+                        });
+                    } else if(isReply === true) {
+                        await message.reply({
+                            content: res,
+                            embeds: EmbedResult,
+                        });
+                    }
                 }
+            } catch (err) {
+                // If error occurs, throw the Error
+                throw err;
             }
         });
     }

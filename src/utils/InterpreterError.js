@@ -5,7 +5,7 @@ class InterpreterError extends Error {
     /**
      * Error on the Interpreter's Function
      * @param {string} message
-     * @param {stribg} params
+     * @param {string} params
      */
     constructor(message, ...params) {
         super(...params);
@@ -15,6 +15,7 @@ class InterpreterError extends Error {
         }
         
         this.name = 'InterpreterError';
+        this.message = message;
     }
 }
 

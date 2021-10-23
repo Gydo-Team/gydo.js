@@ -3,8 +3,8 @@
 module.exports = {
     // Main Classes/Functions
     Bot: require("./bot/main"),
+    BaseBot: require('./bot/BaseBot'),
     interpreter: require('./bot/interpreter'),
-    CommandHandler: require('@gydojs/cmdhandler'),
     
     // Events
     MessageUpdate: require('./events/MessageUpdate'),
@@ -12,7 +12,6 @@ module.exports = {
     guildMemberAdd: require('./events/guildMemberAdd'),
     
     // Managers
-    BaseBot: require('./managers/BaseBot'),
     EventsManager: require('./managers/EventsManager'),
     ActivityManager: require("./managers/ActivityManager"),
     Embed: require('./managers/Embed'),
