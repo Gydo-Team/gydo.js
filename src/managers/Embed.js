@@ -17,7 +17,7 @@ client.embedAuthorURL = new discord.Collection();
  */
 class Embed {
     /** 
-     * @typedef {object} IEmbed
+     * @typedef {Object} IEmbed
      * @property {string} [title]
      * @property {string} [author]
      * @property {string} [authorURL]
@@ -29,7 +29,7 @@ class Embed {
      */
     
     /** 
-     * @typedef {object[]} IEmbedFields
+     * @typedef {Object[]} IEmbedFields
      * @property {string} [name]
      * @property {string} [value]
      * @property {boolean} [inline]
@@ -67,7 +67,7 @@ class Embed {
     }
     
     /** 
-     * Turns a Raw JSON Embed to Embed
+     * Turns a Raw JSON or Object Embed to Embed
      * @returns {MessageEmbed}
      */
     static JSONtoEmbed(rawjson) {

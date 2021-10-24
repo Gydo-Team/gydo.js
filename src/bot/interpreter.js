@@ -45,21 +45,33 @@ class interpreter {
             await this._startInterpreter(client, message.author, args, message, cmdName);
             let res = await this.res;
             let EmbedResult = await this._getEmbed(client, command);
-            if (EmbedResult === null) EmbedResult = [];
                 
             const isReply = await this._isReply(cmdName, client);
+            const sendTyping = await client.cmdTyping.get(cmdName);
         
             // Sending the Message
             try {
                 if(command === cmdName) {
-                    if(res === null) return;
+                    if(this.res === null) return;
                     
-                    if(isReply === false || !isReply) {
+                    if(isReply === false || !isReply && !sendTyping) {
                         await message.channel.send({
                             content: res,
                             embeds: EmbedResult,
                         });
-                    } else if(isReply === true) {
+                    } else if(isReply === true && !sendTyping) {
+                        await message.reply({
+                            content: res,
+                            embeds: EmbedResult,
+                        });
+                    } else if (sendTyping) {
+                        await message.channel.sendTyping();
+                        await message.channel.send({
+                            content: res,
+                            embeds: EmbedResult,
+                        });
+                    } else if (sendTyping && isReply === true) {
+                        await message.channel.sendTyping();
                         await message.reply({
                             content: res,
                             embeds: EmbedResult,
@@ -92,9 +104,11 @@ class interpreter {
         const RawEmbedAuthorURL = client.embedAuthorURL.get(command);
             
         let EmbedRaw = new MessageEmbed();
-        let EmbedResult;
             
-        if (RawEmbedTitle != undefined && RawEmbedDescription != undefined) {
+        if (
+            RawEmbedTitle !== undefined && 
+            RawEmbedDescription !== undefined
+        ) {
             if (RawEmbedTitle) EmbedRaw.setTitle(RawEmbedTitle.toString());
             
             if (RawEmbedDescription) EmbedRaw.setDescription(RawEmbedDescription.toString());
@@ -103,7 +117,7 @@ class interpreter {
             
             if (RawEmbedFields) {
                 const EmbedFields = RawEmbedFields.map(x => {
-                    EmbedRaw.addField(x.name, x.value, x.inline);
+                    EmbedRaw.addField(x.name, x.value, x.inline ? x.inline : null);
                 });
             }
             
@@ -112,15 +126,13 @@ class interpreter {
             if (RawEmbedTimestamp && RawEmbedTimestamp == true) EmbedRaw.setTimestamp();
             
             if (RawEmbedAuthor) {
-                let hasAuthorURL;
-                if (RawEmbedAuthorURL) {
-                hasAuthorURL = RawEmbedAuthorURL.toString();
-            } else hasAuthorURL = null;
-                EmbedRaw.setAuthor(RawEmbedAuthor.toString(), hasAuthorURL);
+                const AuthorURL = RawEmbedAuthorURL ? RawEmbedAuthorURL.toString() : null;
+                
+                EmbedRaw.setAuthor(RawEmbedAuthor.toString(), AuthorURL);
             }
             
-            return EmbedResult = [EmbedRaw];
-        } else return EmbedResult = [];
+            return [EmbedRaw];
+        } else return [];
     }
     
     /**

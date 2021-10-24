@@ -20,9 +20,7 @@ const args = async (client, code, author, args, message, currentCommand) => {
     
         argRes = code
             .replaceAll(`$[args;${argNum}]`, args[argNum]);
-    } else if (!args.length) {
-        argRes = "";
-    }
+    } else if (!args.length) argRes = "";
     
     if(argRes) return argRes
     else return code

@@ -1,6 +1,7 @@
 'use strict';
 const { Constants } = require('discord.js');
 const { ApplicationCommandOptionTypes } = Constants;
+const getOptions = require('../utils/getOptions');
 
 /** 
  * Discord Slash Commands
@@ -10,11 +11,11 @@ class SlashCommandManager {
      * Manager for Slash Commands
      */
     constructor(client) {
-        this.client = client.botClient;
+        this.client = client;
         
         /** 
-        * Slash Command Option types (DJS)
-        */
+         * Slash Command Option types (DJS)
+         */
         this.optionTypes = ApplicationCommandOptionTypes;
     }
     
@@ -23,26 +24,21 @@ class SlashCommandManager {
      * @param {string} slashCommand
      */
     detect(slashCommand) {
-        const client = this.client;
-        client.on("interactionCreate", async (interaction) => {
+        this.client.on("interactionCreate", async (interaction) => {
             if(!interaction.isCommand()) return;
             
             const { commandName, options } = interaction;
             
-            const r = client.slashCode.get(slashCommand);
-            const cmdName = client.slashName.get(slashCommand);
-            const s = `${r}`
-            const res = await s
-            .replace(`$[ping]`, client.ws.ping)
+            const r = this.client.slashCode.get(slashCommand);
+            const cmdName = this.client.slashName.get(slashCommand);
             
-            const ephemeralCMD = client.slashEphemeral.get(cmdName);
+            // 'Interpreting' happens here
+            const code = `${r}`
             
-            let isEphemeral;
-            if(ephemeralCMD == true) {
-                isEphemeral = true;
-            } else if(ephemeralCMD == false) {
-                isEphemeral = false;
-            }
+            
+            const res = await this._startInterpreter(code, options);
+            
+            const isEphemeral = this.client.slashEphemeral.get(cmdName) ?? null;
             
             try {
                 if(commandName === slashCommand) {
@@ -58,7 +54,7 @@ class SlashCommandManager {
     }
     
     /**
-     * @typedef {object} ISlashCMD
+     * @typedef {Object} ISlashCMD
      * @property {string} [name]
      * @property {string} [description]
      * @property {string} [code] 
@@ -67,7 +63,7 @@ class SlashCommandManager {
      */
     
     /** 
-     * @typedef {object|object[]} ICMDSlashOptions
+     * @typedef {Object|Object[]} ICMDSlashOptions
      * @property {string} [name]
      * @property {string} [description]
      * @property {boolean} [required]
@@ -79,7 +75,6 @@ class SlashCommandManager {
      * @param {ISlashCMD} command
      */
     create(command = { name, description, code, ephemeral, guildId, options }) {
-        const client = this.client;
         if(!command.name) throw new Error(`No Slash Command Name`);
         if(!command.description) throw new Error(`No Slash Command Description`);
         if(!command.code) throw new Error(`No Slash Command Code`);
@@ -91,14 +86,14 @@ class SlashCommandManager {
         this._slashOptions = command.options;
         this._slashEphemeral = command.ephemeral;
         
-        client.once('ready', () => {
-            const guild = client.guilds.cache.get(command.guildId);
+        this.client.on('ready', () => {
+            const guild = this.client.guilds.cache.get(command.guildId);
 
             let commands;
             if(guild) {
                 commands = guild.commands;
             } else {
-                commands = client.application?.commands;
+                commands = this.client.application?.commands;
             }
             
             commands?.create({
@@ -108,9 +103,40 @@ class SlashCommandManager {
             });
         });
         
-        client.slashName.set(command.name, command.name);
-        client.slashCode.set(this._slashName, this._slashCode);
-        client.slashEphemeral.set(this._slashName, this._slashEphemeral);
+        this.client.slashName.set(command.name, command.name);
+        this.client.slashCode.set(this._slashName, this._slashCode);
+        this.client.slashEphemeral.set(this._slashName, this._slashEphemeral);
+    }
+    
+    /**
+     * Starts the Interpreter for Slash Commands
+     * @param {string} code - The Code of the Command if any
+     * @param {CommandInteractionOptionResolver} options
+     * @returns {string}
+     * @private
+     */
+    _startInterpreter(code, options) {
+        if(!code) return;
+        
+        let getStrKey = code
+        .split('$[getString;')[1]
+        .split(';')[0]
+        .split(']')[0];
+            
+        let getStrFallback = code
+        .split(`$[getString;${getStrKey};`)[1]
+        .split(']')[0] ?? '';
+
+        let getStr = getOptions(options, 'string', getStrKey) || getStrFallback;
+        
+        const result = code
+        .replaceAll('$[ping]', this.client.ws.ping)
+        .replaceAll(
+            `$[getString;${getStrKey}${getStrFallback ? `;${getStrFallback}` : ''}]`,
+            getStr
+        )
+        
+        return result;
     }
 }
 

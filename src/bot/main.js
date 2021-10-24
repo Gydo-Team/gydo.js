@@ -9,6 +9,7 @@ const chalk = require("chalk");
 
 client.commands = new Collection();
 client.cmdcode = new Collection();
+client.cmdTyping = new Collection();
 client.botprefix = new Collection();
 client.slashName = new Collection();
 client.slashCode = new Collection();
@@ -17,7 +18,6 @@ client.cmdreply = new Collection();
 client.cmds = new Collection();
 
 const Interpreter = require("./interpreter");
-const { Message, Presence, Channel, User, GuildMember, Role } = require("discord.js");
 const { ApplicationCommandOptionTypes } = Constants;
 const ActivityManager = require("../managers/ActivityManager");
 const SlashCommandManager = require('../managers/SlashCommandManager');
@@ -31,7 +31,6 @@ const BaseBot = require('./BaseBot');
  */
 class Bot extends BaseBot {
     /**
-     * 
      * Simple and needed setup to start the bot
      * @param {string} options.token
      * @param {string} options.prefix
@@ -85,10 +84,11 @@ class Bot extends BaseBot {
              * @type {?string}
              * @readonly
              */
-            this.token = token;
+            Object.defineProperty(this, 'token', { value: token });
             
             /** 
              * Client's User Tag
+             * @type {?string}
              * @readonly
              */
             this.tag = client.user?.tag ?? null;
@@ -118,7 +118,7 @@ class Bot extends BaseBot {
          * Slash Commands
          * @type {SlashCommandManager}
          */
-        this.slashCommand = new SlashCommandManager(this);
+        this.slashCommand = new SlashCommandManager(client);
         
         /**
          * Events Manager for manual Events Managing
@@ -161,6 +161,7 @@ class Bot extends BaseBot {
         client.commands.set(commandOptions.name, commandOptions.name);
         client.cmdcode.set(commandOptions.name, commandOptions.code);
         client.cmdreply.set(commandOptions.name, commandOptions.messageReply);
+        client.cmdTyping.set(commandOptions.name, commandOptions.sendTyping);
     }
 
     /**

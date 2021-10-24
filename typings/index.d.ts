@@ -7,6 +7,9 @@ import {
     Channel,
     ClientPresenceStatus,
     Constants,
+    CommandInteractionOptionResolver,
+    ColorResolvable,
+    HexColorString,
     Intents,
     Message,
     Presence,
@@ -99,6 +102,12 @@ export class EventsManager extends EventEmitter {
     ): this;
 }
 
+export function getOptions(options: CommandInteractionOptionResolver, getType: GetOptionsTypes, key: string): string;
+
+export type GetOptionsTypes =
+    | 'string'
+    | 'number';
+
 export class guildMemberAdd {
     public constructor(channel: string, message: string, client: Client);
     public message: string;
@@ -151,6 +160,7 @@ export class SlashCommandManager {
     private readonly _slashGuildId: string | Channel;
     private readonly _slashOptions: object;
     private readonly _slashEphemeral: boolean;
+    public _startInterpreter(code: string, options: CommandInteractionOptionResolver): string;
 }
 
 //#endregion
@@ -173,11 +183,11 @@ export interface EventsOptions {
 }
 
 export type ActivityOptions = 
-    | "PLAYING" 
-    | "LISTENING"
-    | "STREAMING"
-    | "WATCHING"
-    | "COMPETING";
+    | 'PLAYING'
+    | 'LISTENING'
+    | 'STREAMING'
+    | 'WATCHING'
+    | 'COMPETING';
     
 export type NormalStatusTypes =
     | 'online'
@@ -194,6 +204,7 @@ export interface ICommand {
     name: string;
     code: string
     messageReply?: boolean;
+    sendTyping?: boolean;
 }
 
 export interface ISlashCMD {
@@ -222,46 +233,6 @@ export interface EmbedStructure {
     color?: ColorResolvable;
     timestamp?: boolean;
 }
-
-// HexColorString from discord.js' Embeds
-type HexColorString = `#${string}`;
-
-// ColorResolvable from discord.js' Embeds
-type ColorResolvable =
-  | 'DEFAULT'
-  | 'WHITE'
-  | 'AQUA'
-  | 'GREEN'
-  | 'BLUE'
-  | 'YELLOW'
-  | 'PURPLE'
-  | 'LUMINOUS_VIVID_PINK'
-  | 'FUCHSIA'
-  | 'GOLD'
-  | 'ORANGE'
-  | 'RED'
-  | 'GREY'
-  | 'DARKER_GREY'
-  | 'NAVY'
-  | 'DARK_AQUA'
-  | 'DARK_GREEN'
-  | 'DARK_BLUE'
-  | 'DARK_PURPLE'
-  | 'DARK_VIVID_PINK'
-  | 'DARK_GOLD'
-  | 'DARK_ORANGE'
-  | 'DARK_RED'
-  | 'DARK_GREY'
-  | 'LIGHT_GREY'
-  | 'DARK_NAVY'
-  | 'BLURPLE'
-  | 'GREYPLE'
-  | 'DARK_BUT_NOT_BLACK'
-  | 'NOT_QUITE_BLACK'
-  | 'RANDOM'
-  | readonly [number, number, number]
-  | number
-  | HexColorString;
 
 export interface EmbedFields {
     name?: string;

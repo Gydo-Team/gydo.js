@@ -20,7 +20,7 @@ const ban = async (client, code, author, args, message, currentCommand) => {
     if(!argTarget) return code;
 
     const res = await code
-    .replace(`$[ban;${argTarget}]`, "");
+    .replace(`$[ban;${argTarget}]`, '');
 
     const ban = await message.guild.members.ban(args[argTarget]).catch(err => {
         return message.channel.send(":x: An Error Occured while trying to ban the user (try checking if the bot has the permission to ban)");
