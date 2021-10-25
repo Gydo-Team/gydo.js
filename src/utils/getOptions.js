@@ -1,8 +1,9 @@
 /**
  * Gets the value of a slash command option
  * @param {CommandInteractionOptionResolver} options
- * @param {'string'|'number'} getType
+ * @param {GetOptionsTypes} getType
  * @param {string} key - The name of the option
+ * @returns {*|null}
  */
 function getOptions(options, getType, key) {
     let getResults;

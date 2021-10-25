@@ -22,11 +22,11 @@ import {
 import { EventEmitter } from 'events';
 import {
     Snowflake,
-} from 'discord-api-types/v9'
+} from 'discord-api-types/v9';
 
 //#region
-export class ActivityManager<T> {
-    public constructor(data: T);
+export class ActivityManager {
+    public constructor(data: Bot);
     public setActivity(status: string, options: ActivityTypes): void;
     public setUserStatus(status: NormalStatusTypes): void;
     public loopStatus(arrayOfStatus: string[], time: number, type: ActivityTypes): void;
@@ -37,20 +37,19 @@ export class ActivityManager<T> {
 
 export class Bot extends BaseBot {
     public constructor (va: BotOptions);
-    public readonly ping: number;
+    public readonly ping: number | null;
     public readonly token: string;
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
-    public activity: ActivityManager<this>;
+    public activity: ActivityManager;
     public slashCommand: SlashCommandManager;
     public events: EventsManager;
     public cmd(commandOptions: ICommand): void;
     public MessageDetect(): void;
-    public botClient: Client<true>;
 }
 
-export class BaseBot {
+export class BaseBot extends EventEmitter {
     public constructor(client: Client);
     private client: Client;
     public guildMemberAdd(options: GuildMemberOptions): void;
@@ -102,7 +101,7 @@ export class EventsManager extends EventEmitter {
     ): this;
 }
 
-export function getOptions(options: CommandInteractionOptionResolver, getType: GetOptionsTypes, key: string): string;
+export function getOptions(options: CommandInteractionOptionResolver, getType: GetOptionsTypes, key: string): string | null;
 
 export type GetOptionsTypes =
     | 'string'

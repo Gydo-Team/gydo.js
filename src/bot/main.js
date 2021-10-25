@@ -32,8 +32,8 @@ const BaseBot = require('./BaseBot');
 class Bot extends BaseBot {
     /**
      * Simple and needed setup to start the bot
-     * @param {string} options.token
-     * @param {string} options.prefix
+     * @param {string} options.token - The Token of the Bot, required to log in to the Bot
+     * @param {string} options.prefix- Prefix of the Bot
      * @param {boolean} options.logEvents If you want to log the events on what is happening on the bot
      * @example
      * // Example
@@ -45,14 +45,11 @@ class Bot extends BaseBot {
      */
     constructor (options = {}) {
         super(client);
-        const { token, prefix, logEvents } = Object.defineProperties(options, {
+        const { token, prefix } = Object.defineProperties(options, {
             token: {
                 writable: true,
             },
             prefix: {
-                writable: true,
-            },
-            logEvents: {
                 writable: true,
             },
         });
@@ -72,11 +69,17 @@ class Bot extends BaseBot {
 
         client.botprefix.set("prefix", this.prefix)
         
-        let wantLogged = logEvents ? true : false;
-
+        /**
+         * Whether the Events should be logged or not 
+         * @type {boolean}
+         */
+        this.wantLogged = options.logEvents ? true : false;
+        
         client.login(token);
-        client.once('ready', async () => {
-            if (wantLogged !== false) console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
+        client.on('ready', async (c) => {
+            if (!options.logEvents || options.logEvents != false) {
+                console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
+            }
             
             /** 
              * Bot's token
@@ -84,7 +87,7 @@ class Bot extends BaseBot {
              * @type {?string}
              * @readonly
              */
-            Object.defineProperty(this, 'token', { value: token });
+            Object.defineProperty(this, 'token', { value: token, writable: false });
             
             /** 
              * Client's User Tag
@@ -125,19 +128,14 @@ class Bot extends BaseBot {
          * @type {EventsManager}
          */
         this.events = new EventsManager();
-        
-        /**
-         * The Raw Properties of the bot that is currently running. Meaning the not simplified Client that is currently running, if any
-         * @type {Client}
-         */
-        this.botClient = client;
     }
 
     /**
      * Sets a new command for the bot
-     * @param {string} commandOptions.name
-     * @param {string} commandOptions.code
-     * @param {string} [commandOptions.messageReply]
+     * @param {string} commandOptions.name - Name of the command
+     * @param {string} commandOptions.code - Code of the command
+     * @param {boolean} [commandOptions.messageReply] - If you want to reply to the message
+     * @param {boolean} [sendTyping] - If you want the bot to send the message typing
      * @example
      * bot.cmd({
          name: 'ping',
@@ -146,7 +144,7 @@ class Bot extends BaseBot {
      */
     cmd(commandOptions = {}) {
         /**
-         * Shows the commands you have put, if there is one
+         * Shows the commands you have put, if any.
          * @type {?string}
          */
         this.cmdname = commandOptions.name;
@@ -165,7 +163,7 @@ class Bot extends BaseBot {
     }
 
     /**
-     * Detects the command, if any.
+     * Listens/Detects for Message Creation, and Detects the command, if any.
      */
     MessageDetect() {
         new Interpreter(client);

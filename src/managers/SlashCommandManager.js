@@ -15,6 +15,7 @@ class SlashCommandManager {
         
         /** 
          * Slash Command Option types (DJS)
+         * @type {ApplicationCommandOptionTypes}
          */
         this.optionTypes = ApplicationCommandOptionTypes;
     }
@@ -36,9 +37,9 @@ class SlashCommandManager {
             const code = `${r}`
             
             
-            const res = await this._startInterpreter(code, options);
+            const res = await this._startInterpreter(code, options, interaction);
             
-            const isEphemeral = this.client.slashEphemeral.get(cmdName) ?? null;
+            const isEphemeral = this.client.slashEphemeral.get(cmdName) ?? false;
             
             try {
                 if(commandName === slashCommand) {
@@ -54,6 +55,7 @@ class SlashCommandManager {
     }
     
     /**
+     * Properties of a Command
      * @typedef {Object} ISlashCMD
      * @property {string} [name]
      * @property {string} [description]
@@ -112,10 +114,11 @@ class SlashCommandManager {
      * Starts the Interpreter for Slash Commands
      * @param {string} code - The Code of the Command if any
      * @param {CommandInteractionOptionResolver} options
+     * @param {Interaction} interaction
      * @returns {string}
      * @private
      */
-    _startInterpreter(code, options) {
+    _startInterpreter(code, options, interaction) {
         if(!code) return;
         
         let getStrKey = code
@@ -135,6 +138,9 @@ class SlashCommandManager {
             `$[getString;${getStrKey}${getStrFallback ? `;${getStrFallback}` : ''}]`,
             getStr
         )
+        .replaceAll('$[guild.name]', interaction.guild.name)
+        .replaceAll('$[author]', `<@${interaction.user.id}>`)
+        .replaceAll('$[author.tag]', interaction.user.tag)
         
         return result;
     }

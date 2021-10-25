@@ -6,5 +6,5 @@
         "moduleResolution": "node",
         "module": "commonjs"
     }, 
-    "exclude": ["node_modules", "package-lock.json"]
+    "exclude": ["node_modules", "package-lock.json", "src", "docs"]
 }

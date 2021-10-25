@@ -1,21 +1,19 @@
 'use strict';
 
-const client = require('../utils/client');
 const chalk = require('chalk');
 
 /** 
  * Activity/Presence Managing
  */
 class ActivityManager {
-    /**
-     * @param {Client|object} data - The Data of the Client or if an object it must have a wantLogged boolean
-     */
-    constructor(data) {
+    constructor(bot) {
         /**
          * If you want it to be logged
          * @private
          */
-        this.wantLogged = data.wantLogged;
+        this.wantLogged = bot.wantLogged;
+        
+        this.client = bot.client;
     }
     
     /** 
@@ -40,9 +38,11 @@ class ActivityManager {
         
         if(typeof this.currentStatus !== "string") throw new Error('Status not a string');
         
-        client.on("ready", async () => {
-            client.user.setActivity(this.currentStatus, { type: options.type, url: options.url || null })
-            if(this.wantLogged === false) console.log(chalk.blue(`Bot's status set to: ${this.currentStatus}`));
+        this.client.on("ready", async () => {
+            this.client.user.setActivity(this.currentStatus, { type: options.type, url: options.url || null })
+            if(this.wantLogged === true || !this.wantLogged) {
+                console.log(chalk.blue(`Bot's status set to: ${this.currentStatus}`));
+            }
         });
     }
 
@@ -61,8 +61,8 @@ class ActivityManager {
          */
         this.normalStatus = status;
         
-        client.once('ready', async () => {
-            client.user.setStatus(status);
+        this.client.once('ready', async () => {
+            this.client.user.setStatus(status);
             if(this.wantLogged) console.log(chalk.blue(`Set Normal Status to: ${this.normalStatus}`));
         });
     }
@@ -83,12 +83,12 @@ class ActivityManager {
         if(typeof time !== 'number') throw new TypeError(`Time NOT a NUMBER`);
         
         // Sets the Changing Status Loop
-        client.on("ready", async () => {
+        this.client.on("ready", async () => {
             let i = 0;
             setInterval(() => {
                 if(i === arrayOfStatus.length) i = 0;
                 const res = arrayOfStatus[i];
-                client.user.setActivity(res, { type: type })
+                this.client.user.setActivity(res, { type: type })
                 i++;
             }, time);
         });
