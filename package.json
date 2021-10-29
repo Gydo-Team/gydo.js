@@ -2,6 +2,10 @@
   "name": "gydo.js",
   "version": "1.3.0-dev.ceeb69e440a02c69b9cb52a66d8e4f9a",
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
+  "files": [
+    "src",
+    "typings"
+  ],
   "exports": {
     ".": {
       "require": "./src/index.js"
@@ -11,7 +15,7 @@
   "scripts": {
     "test": "node .",
     "test:dnt": "node ../testings/test.js",
-    "test:tsc": "tsc typings/index.d.ts -t esnext -m commonjs --esModuleInterop --moduleResolution node"
+    "test:tsc": "tsc"
   },
   "keywords": [
     "discord",

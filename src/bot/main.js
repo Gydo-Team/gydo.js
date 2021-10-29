@@ -7,6 +7,7 @@ const client = require('../utils/client');
 const fs = require("fs");
 const chalk = require("chalk");
 
+// TODO: minimize these collections
 client.commands = new Collection();
 client.cmdcode = new Collection();
 client.cmdTyping = new Collection();
@@ -15,15 +16,20 @@ client.slashName = new Collection();
 client.slashCode = new Collection();
 client.slashEphemeral = new Collection();
 client.cmdreply = new Collection();
-client.cmds = new Collection();
 
 const Interpreter = require("./interpreter");
 const { ApplicationCommandOptionTypes } = Constants;
 const ActivityManager = require("../managers/ActivityManager");
 const SlashCommandManager = require('../managers/SlashCommandManager');
-const SaveEmbed = require('../utils/embed');
 const EventsManager = require('../managers/EventsManager');
 const BaseBot = require('./BaseBot');
+
+/**
+ * @typedef {Object} BotOptions
+ * @property {string} token - The token of the Bot, required to initiate the Bot
+ * @property {string} prefix - Prefix of the Bot
+ * @property {boolean} logEvents - If you want gydo to log events
+ */
 
 /**
  * Bot/Client class for Discord Bots
@@ -32,27 +38,18 @@ const BaseBot = require('./BaseBot');
 class Bot extends BaseBot {
     /**
      * Simple and needed setup to start the bot
-     * @param {string} options.token - The Token of the Bot, required to log in to the Bot
-     * @param {string} options.prefix- Prefix of the Bot
-     * @param {boolean} options.logEvents If you want to log the events on what is happening on the bot
+     * @param {BotOptions} options
      * @example
      * // Example
-     * const gydo = require("gydo.js-dev");
+     * const gydo = require("gydo.js");
      * const bot = new gydo.Bot({ 
      *     token: "TOKEN",
      *     prefix: "!"
      * });
      */
-    constructor (options = {}) {
+    constructor (options) {
         super(client);
-        const { token, prefix } = Object.defineProperties(options, {
-            token: {
-                writable: true,
-            },
-            prefix: {
-                writable: true,
-            },
-        });
+        const { token, prefix } = options;
         
         if(!token) throw new Error(`INVALID_TOKEN`);
 
@@ -129,13 +126,19 @@ class Bot extends BaseBot {
          */
         this.events = new EventsManager();
     }
+    
+    /**
+     * Command Options for a message command
+     * @typedef {Object} ICommand
+     * @param {string} name - Name of the Command
+     * @param {string} code - Code of the Command
+     * @param {boolean} [messageReply] - Optional property if you want the bot to reply to the message author
+     * @param {boolean} [sendTyping] - If you want the bot to send the message typing
+     */
 
     /**
      * Sets a new command for the bot
-     * @param {string} commandOptions.name - Name of the command
-     * @param {string} commandOptions.code - Code of the command
-     * @param {boolean} [commandOptions.messageReply] - If you want to reply to the message
-     * @param {boolean} [sendTyping] - If you want the bot to send the message typing
+     * @param {ICommand} commandOptions
      * @example
      * bot.cmd({
          name: 'ping',

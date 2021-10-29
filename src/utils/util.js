@@ -2,18 +2,34 @@ class Util {
     /**
      * To mention a user/role/VC
      * @param {string} target
-     * @param {stribg} mentionType
+     * @param {string} mentionType
+     * @returns {string|null}
      */
     static mention(target, mentionType) {
-        if (mentionType === "user") {
-            return `<@!` + target + `>`
-        } else if (mentionType === "role") {
-            return `<@&` + target `>`
-        } else if (mentionType === 'channel') {
-            return '<#' + target + '>'
-        } else if (mentionType === 'vc') {
-            return '<#!' + target + '>'
+        let res;
+        
+        switch(mentionType) {
+            case 'user':
+                res = `<@${target}>`
+                break;
+            
+            case 'role':
+                res = `<@&${target}>`
+                break;
+                
+            case 'channel':
+                res = `<#${target}>`
+                break;
+                
+            case 'vc':
+                res = `<#!${target}>`
+                break;
+                
+            default:
+                res = `<@${target}>`
         }
+        
+        return res;
     }
 }
 

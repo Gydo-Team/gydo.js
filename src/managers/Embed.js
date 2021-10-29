@@ -1,16 +1,15 @@
 const client = require('../utils/client');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Collection } = require('discord.js');
 const discord = require('discord.js');
 
-client.embedTitle = new discord.Collection();
-client.embedDesc = new discord.Collection();
-
-client.embedFooter = new discord.Collection();
-client.embedFields = new discord.Collection();
-client.embedColor = new discord.Collection();
-client.embedTimestamp = new discord.Collection();
-client.embedAuthor = new discord.Collection();
-client.embedAuthorURL = new discord.Collection();
+client.embedTitle = new Collection();
+client.embedDesc = new Collection();
+client.embedFooter = new Collection();
+client.embedFields = new Collection();
+client.embedColor = new Collection();
+client.embedTimestamp = new Collection();
+client.embedAuthor = new Collection();
+client.embedAuthorURL = new Collection();
 
 /**
  * Discord Message Embed

@@ -6,19 +6,22 @@ const guildBanAdd = require('../events/guildBanAdd');
 const { Client } = require('discord.js');
 
 /**
+ * @typedef {Object} GuildMemberEventsOptions
+ * @property {string} message - Message for when a `guildMember` event is received
+ * @property {string} channel - The Channel to send the Message
+ */
+
+/**
  * Base Class of the Class Bot, all events goes here
  */
 class BaseBot {
-    /** 
-     * Initiate the Bot
-     * @param {Client} client
-     */
     constructor(client) {
-        if(!client instanceof Client || client === null) throw new Error('Client Parameter cannot be null or undefined');
+        if(!client instanceof Client || !client) throw new Error('Client Parameter cannot be null or undefined');
     
         /**
-         * The Raw Properties of the bot that is currently running. Meaning the not simplified Client that is currently running, if any
+         * Client to manage things on
          * @type {Client}
+         * @private
          */
         this.client = client;
     }
@@ -26,9 +29,9 @@ class BaseBot {
     /**
      * A Welcome Message (guildMemberAdd Event)
      * Requires a channel id to return the message
-     * @param {string} options.channel
-     * @param {string} options.message
-     * @example bot.guildMemberAdd({
+     * @param {GuildMemberEventsOptions} options
+     * @example 
+     * bot.guildMemberAdd({
          channel: "1234567891011",
          message: "$[member] Welcome!"
      })
@@ -42,8 +45,7 @@ class BaseBot {
     
     /**
      * A leave message (guildMemberRemove Event)
-     * @param {string} options.channel
-     * @param {string} options.message
+     * @param {GuildMemberEventsOptions} options
      * @example bot.guildMemberAdd({
          channel: "1234567891011",
          message: "Sad to see you leave $[member.tag].."

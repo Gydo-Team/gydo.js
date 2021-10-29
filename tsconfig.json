@@ -4,7 +4,8 @@
         "strict": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "module": "commonjs"
+        "module": "commonjs",
+        "skipDefaultLibCheck": true
     }, 
     "exclude": ["node_modules", "package-lock.json", "src", "docs"]
 }
