@@ -52,8 +52,8 @@ export class Bot extends BaseBot {
 export class BaseBot extends EventEmitter {
     public constructor(client: Client);
     private client: Client;
-    public guildMemberAdd(options: GuildMemberOptions): void;
-    public guildMemberRemove(options: GuildMemberOptions): void;
+    public guildMemberAdd(options: GuildMemberEventsOptions): void;
+    public guildMemberRemove(options: GuildMemberEventsOptions): void;
     public MessageUpdate(options: EventsOptions): void;
     public onError(callback: (err: Error) => void): void;
     public onReady(cb: (client: Client<true>) => Awaitable<void>): void;
@@ -145,7 +145,7 @@ export class MessageUpdate {
 }
 
 export class Util {
-    public static mention(target: string, mentionType: string): string;
+    public static mention(target: string, mentionType: string): string | null;
 }
 
 export class SlashCommandManager {
@@ -171,7 +171,7 @@ export interface BotOptions {
     logEvents?: boolean;
 }
 
-export interface GuildMemberOptions {
+export interface GuildMemberEventsOptions {
     channel: Channel;
     message: Message;
 }
