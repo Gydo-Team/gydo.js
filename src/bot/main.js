@@ -7,15 +7,11 @@ const client = require('../utils/client');
 const fs = require("fs");
 const chalk = require("chalk");
 
-// TODO: minimize these collections
-client.commands = new Collection();
-client.cmdcode = new Collection();
-client.cmdTyping = new Collection();
+const { commands } = require('../Collections');
 client.botprefix = new Collection();
 client.slashName = new Collection();
 client.slashCode = new Collection();
 client.slashEphemeral = new Collection();
-client.cmdreply = new Collection();
 
 const Interpreter = require("./interpreter");
 const { ApplicationCommandOptionTypes } = Constants;
@@ -74,7 +70,7 @@ class Bot extends BaseBot {
         
         client.login(token);
         client.on('ready', async (c) => {
-            if (!options.logEvents || options.logEvents != false) {
+            if (!options.logEvents || options.logEvents !== false) {
                 console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
             }
             
@@ -145,9 +141,9 @@ class Bot extends BaseBot {
          code: 'pong!'
      })
      */
-    cmd(commandOptions = {}) {
+    cmd(commandOptions) {
         /**
-         * Shows the commands you have put, if any.
+         * Name of your commands, if any.
          * @type {?string}
          */
         this.cmdname = commandOptions.name;
@@ -159,10 +155,7 @@ class Bot extends BaseBot {
         if(typeof commandOptions.name !== 'string') throw new TypeError(`CMD_NAME_NOT_STRING`)
         if(typeof commandOptions.code !== 'string') throw new TypeError(`CMD_CODE_NOT_STRING`)
 
-        client.commands.set(commandOptions.name, commandOptions.name);
-        client.cmdcode.set(commandOptions.name, commandOptions.code);
-        client.cmdreply.set(commandOptions.name, commandOptions.messageReply);
-        client.cmdTyping.set(commandOptions.name, commandOptions.sendTyping);
+        commands.set(commandOptions.name, { ...commandOptions });
     }
 
     /**

@@ -3,6 +3,7 @@
 const { MessageEmbed, Client } = require("discord.js");
 const fs = require('fs');
 const path = require('path');
+const { commands } = require('../Collections');
 
 /** 
  * Message Event Interpreter 
@@ -19,23 +20,25 @@ class interpreter {
                 
         client.on('messageCreate', async (message) => {
             const getPref = client.botprefix.get("prefix");
-            const s = getPref ? getPref : prefix;
+            const prefix = getPref?.toString();
             
-            const prefix = `${s}`;
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const command = args.shift().toLowerCase();
             
-            // Raw Code
-            const h = client.cmdcode.get(command);
-            
-            const cmdName = client.commands.get(command)
+            const cmdProperties = commands.get(command);
             if(!message.content.startsWith(prefix)) return;
             if(message.author.bot) return;
             
-            const code = `${h}`
+            const cmdName = cmdProperties?.name;
+            const code = `${cmdProperties ? cmdProperties?.code : ''}`
+            const messageReply = cmdProperties?.messageReply;
+            const sendTyping = cmdProperties?.sendTyping;
+
             this.code = code;
             this._author = message.author;
             this.args = args;
+        
+        
             this._message = message;
             this.currentCommand = cmdName;
                 
@@ -44,10 +47,8 @@ class interpreter {
             // Start the Interpreter
             await this._startInterpreter(client, message.author, args, message, cmdName);
             let res = await this.res;
+            const isReply = messageReply ? true : false;
             let EmbedResult = await this._getEmbed(client, command);
-                
-            const isReply = await this._isReply(cmdName, client);
-            const sendTyping = await client.cmdTyping.get(cmdName);
         
             // Sending the Message
             try {
@@ -116,9 +117,11 @@ class interpreter {
             if (RawEmbedFooter) EmbedRaw.setFooter(RawEmbedFooter.toString());
             
             if (RawEmbedFields) {
+                console.time("t")
                 const EmbedFields = RawEmbedFields.map(x => {
                     EmbedRaw.addField(x.name, x.value, x.inline ? x.inline : null);
                 });
+                console.timeEnd("t")
             }
             
             if (RawEmbedColor) EmbedRaw.setColor(RawEmbedColor.toString());
@@ -133,19 +136,6 @@ class interpreter {
             
             return [EmbedRaw];
         } else return [];
-    }
-    
-    /**
-     * If wether the command should reply on the message
-     * @param {string} command The name of the command
-     * @param {Client} client Client you are running
-     * @returns {boolean}
-     * @private
-     */
-    _isReply(command, client) {
-        let reply = client.cmdreply.get(command);
-        
-        return reply ? true : false;
     }
     
     /**
