@@ -1,9 +1,12 @@
+const { Client } = require('discord.js');
+
 /**
  * Handle the `guildBanAdd` event
  * @param {Client} client
+ * @private
  */
 function guildBanAdd(client, channel, message) {
-    if(!client || client === null) throw new Error('Client parameter cannot be null');
+    if(!client instanceof Client || !client) throw new Error('Client parameter cannot be null');
     
     client?.on('guildBanAdd', (ban) => {
         const channel = client?.channels.cache.get(channel);

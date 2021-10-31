@@ -1,7 +1,8 @@
 'use strict';
 const { Constants } = require('discord.js');
 const { ApplicationCommandOptionTypes } = Constants;
-const getOptions = require('../utils/getOptions');
+const Util = require('../utils/util');
+const { slashCommands } = require('../Collections');
 
 /** 
  * Discord Slash Commands
@@ -30,16 +31,15 @@ class SlashCommandManager {
             
             const { commandName, options } = interaction;
             
-            const r = this.client.slashCode.get(slashCommand);
-            const cmdName = this.client.slashName.get(slashCommand);
+            const r = slashCommands.get(commandName)?.code;
+            const cmdName = slashCommands.get(commandName)?.name;
             
             // 'Interpreting' happens here
             const code = `${r}`
             
-            
             const res = await this._startInterpreter(code, options, interaction);
             
-            const isEphemeral = this.client.slashEphemeral.get(cmdName) ?? false;
+            const isEphemeral = slashCommands.get(cmdName)?.ephemeral ?? false;
             
             try {
                 if(commandName === slashCommand) {
@@ -57,9 +57,10 @@ class SlashCommandManager {
     /**
      * Properties of a Command
      * @typedef {Object} ISlashCMD
-     * @property {string} [name]
-     * @property {string} [description]
-     * @property {string} [code] 
+     * @property {string} name
+     * @property {string} description
+     * @property {string} code
+     * @property {boolean} [ephemeral]
      * @property {string} [guildId]
      * @property {ICMDSlashOptions|ICMDSlashOptions[]} [options]
      */
@@ -73,7 +74,7 @@ class SlashCommandManager {
      */
     
     /** 
-     * Discord Slash Commands
+     * Creates a slash command
      * @param {ISlashCMD} command
      */
     create(command = { name, description, code, ephemeral, guildId, options }) {
@@ -105,9 +106,7 @@ class SlashCommandManager {
             });
         });
         
-        this.client.slashName.set(command.name, command.name);
-        this.client.slashCode.set(this._slashName, this._slashCode);
-        this.client.slashEphemeral.set(this._slashName, this._slashEphemeral);
+        slashCommands.set(command.name, { ...command });
     }
     
     /**
@@ -130,7 +129,7 @@ class SlashCommandManager {
         .split(`$[getString;${getStrKey};`)[1]
         .split(']')[0] ?? '';
 
-        let getStr = getOptions(options, 'string', getStrKey) || getStrFallback;
+        let getStr = Util.getOptions(options, 'string', getStrKey) || getStrFallback;
         
         const result = code
         .replaceAll('$[ping]', this.client.ws.ping)
