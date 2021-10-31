@@ -4,6 +4,7 @@ const { MessageEmbed, Client } = require("discord.js");
 const fs = require('fs');
 const path = require('path');
 const { commands } = require('../Collections');
+const InterpreterError = require('../utils/InterpreterError');
 
 /** 
  * Message Event Interpreter 
@@ -117,11 +118,9 @@ class interpreter {
             if (RawEmbedFooter) EmbedRaw.setFooter(RawEmbedFooter.toString());
             
             if (RawEmbedFields) {
-                console.time("t")
-                const EmbedFields = RawEmbedFields.map(x => {
+                const EmbedFields = RawEmbedFields.forEach((x) => {
                     EmbedRaw.addField(x.name, x.value, x.inline ? x.inline : null);
                 });
-                console.timeEnd("t")
             }
             
             if (RawEmbedColor) EmbedRaw.setColor(RawEmbedColor.toString());
@@ -147,13 +146,18 @@ class interpreter {
     async _startInterpreter(client, author, args, message, currentCommand) {
         const funcs = fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));
         
+        /**
+         * Array of the things the interpreter needs to work on, if any
+         * @type {Array|null}
+         * @private
+         */
         this.functions = this.code.split("$[");
 
         const functions = this.functions
 
         for await (const func of funcs) {
             for (let i = functions.length - 1; i > 0; i--) {
-                if (typeof this.res !== 'string') return;
+                if (typeof this.res !== 'string') throw new InterpreterError('Code type not string');
                 
                 const res = await require(`../funcs/${func}`)(client, this.res, author, args, message, currentCommand, this.code);
 

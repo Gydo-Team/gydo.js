@@ -1,11 +1,14 @@
+const { commands } = require('../Collections');
+
 /** 
  * Bans the user if specified
  */
 const ban = async (client, code, author, args, message, currentCommand) => {
     if(code === null) return;
     
-    const c = await client.cmdcode.get(currentCommand);
-    let rawCode = await `${c}`
+    // Gets the Code and turns in to a String
+    // Seperating it also from the original code
+    const rawCode = await commands.get(currentCommand)?.code?.toString();
     
     let m;
     await rawCode

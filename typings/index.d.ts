@@ -101,12 +101,6 @@ export class EventsManager extends EventEmitter {
     ): this;
 }
 
-export function getOptions(options: CommandInteractionOptionResolver, getType: GetOptionsTypes, key: string): string | null;
-
-export type GetOptionsTypes =
-    | 'string'
-    | 'number';
-
 export class guildMemberAdd {
     public constructor(channel: string, message: string, client: Client);
     public message: string;
@@ -135,6 +129,7 @@ export class interpreter {
 export class InterpreterError extends Error {
     public constructor(message: string, params: string);
     public readonly name: string;
+    public readonly message: string;
 }
 
 export class MessageUpdate {
@@ -146,7 +141,16 @@ export class MessageUpdate {
 
 export class Util {
     public static mention(target: string, mentionType: string): string | null;
+    public static getOptions(
+        options: CommandInteractionOptionResolver, 
+        getType: GetOptionsTypes, 
+        key: string
+    ): any | null;
 }
+
+export type GetOptionsTypes =
+    | 'string'
+    | 'number';
 
 export class SlashCommandManager {
     public constructor(client: Client);
@@ -207,11 +211,11 @@ export interface ICommand {
 }
 
 export interface ISlashCMD {
-    name?: string;
-    description?: string;
-    code?: string;
+    name: string;
+    description: string;
+    code: string;
     ephemeral?: boolean;
-    guildId?: Channel;
+    guildId?: Snowflake;
     options?: ICMDSlashOptions | ICMDSlashOptions[];
 }
 

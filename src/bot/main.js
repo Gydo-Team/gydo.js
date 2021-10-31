@@ -9,9 +9,6 @@ const chalk = require("chalk");
 
 const { commands } = require('../Collections');
 client.botprefix = new Collection();
-client.slashName = new Collection();
-client.slashCode = new Collection();
-client.slashEphemeral = new Collection();
 
 const Interpreter = require("./interpreter");
 const { ApplicationCommandOptionTypes } = Constants;
@@ -21,10 +18,11 @@ const EventsManager = require('../managers/EventsManager');
 const BaseBot = require('./BaseBot');
 
 /**
+ * Available options for your Bot
  * @typedef {Object} BotOptions
  * @property {string} token - The token of the Bot, required to initiate the Bot
  * @property {string} prefix - Prefix of the Bot
- * @property {boolean} logEvents - If you want gydo to log events
+ * @property {boolean} [logEvents] - If you want gydo to log events
  */
 
 /**
@@ -71,7 +69,7 @@ class Bot extends BaseBot {
         client.login(token);
         client.on('ready', async (c) => {
             if (!options.logEvents || options.logEvents !== false) {
-                console.log(chalk.red(`Bot is Ready! | Logged in as ${client.user.tag}`));
+                console.log(chalk.red(`Bot is Ready! | Logged in as ${c.user.tag}`));
             }
             
             /** 
@@ -87,37 +85,37 @@ class Bot extends BaseBot {
              * @type {?string}
              * @readonly
              */
-            this.tag = client.user?.tag ?? null;
+            this.tag = c.user?.tag ?? null;
                 
             /**
              * Bot Websocket Ping in Miliseconds 
              * @type {?number}
              * @readonly
              */
-            this.ping = client.ws.ping ?? null;
+            this.ping = c.ws.ping ?? null;
                 
             /** 
              * Bots ID
              * @type {?Snowflake}
              * @readonly
              */
-            this.id = client.user?.id ?? null;
+            this.id = c.user?.id ?? null;
         });
         
         /**
-         * Activity of your Discord Bot
+         * Manages the Presence of your Discord Bot
          * @type {ActivityManager}
          */
         this.activity = new ActivityManager(this);
         
         /**
-         * Slash Commands
+         * Manages your Slash Commands
          * @type {SlashCommandManager}
          */
         this.slashCommand = new SlashCommandManager(client);
         
         /**
-         * Events Manager for manual Events Managing
+         * Manual Events Managing
          * @type {EventsManager}
          */
         this.events = new EventsManager();
