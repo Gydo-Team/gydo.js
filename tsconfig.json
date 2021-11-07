@@ -7,5 +7,5 @@
         "module": "commonjs",
         "skipDefaultLibCheck": true
     }, 
-    "exclude": ["node_modules", "package-lock.json", "src", "docs"]
+    "exclude": ["node_modules", "src", "docs"]
 }

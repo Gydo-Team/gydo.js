@@ -12,7 +12,7 @@ const { Client } = require('discord.js');
  */
 
 /**
- * Base Class of the Class Bot, all events goes here
+ * Base Class of/for the Bot Class, all events goes here
  */
 class BaseBot {
     constructor(client) {
@@ -78,6 +78,8 @@ class BaseBot {
      * @param {ClientError} callback
      */
     onError(callback) {
+        if (typeof callback !== 'function') throw new Error('First Argument is not a function.');
+        
         this.client.on('error', (err) => callback(err));
     }
     
@@ -92,6 +94,8 @@ class BaseBot {
      * @param {BotReady} cb
      */
     onReady(cb) {
+        if (typeof cb !== 'function') throw new Error('First Argument is not a function.');
+        
         this.client.on('ready', (c) => cb(c));
     }
     

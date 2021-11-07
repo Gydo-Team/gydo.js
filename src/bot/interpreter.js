@@ -3,20 +3,17 @@
 const { MessageEmbed, Client } = require("discord.js");
 const fs = require('fs');
 const path = require('path');
-const { commands } = require('../Collections');
+const { embeds } = require('../Collections');
 const InterpreterError = require('../utils/InterpreterError');
 
 /** 
- * Message Event Interpreter 
+ * Message Event Interpreter
+ * Specifically for gydo.js
  * Detects the messages and see if
  * it matches the command you made
  */
 class interpreter {
-    /**
-     * Interpreter
-     * @param {Client} client - The Current Client that's running
-     */
-    constructor(client) {
+    constructor(client, collections) {
         if(!client instanceof Client || !client) throw new Error('Client Parameter has no value');
                 
         client.on('messageCreate', async (message) => {
@@ -26,19 +23,19 @@ class interpreter {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
             const command = args.shift().toLowerCase();
             
-            const cmdProperties = commands.get(command);
             if(!message.content.startsWith(prefix)) return;
             if(message.author.bot) return;
             
-            const cmdName = cmdProperties?.name;
-            const code = `${cmdProperties ? cmdProperties?.code : ''}`
-            const messageReply = cmdProperties?.messageReply;
-            const sendTyping = cmdProperties?.sendTyping;
+            const {
+                cmdName,
+                code,
+                messageReply,
+                sendTyping,
+            } = await this.getAllProperties(collections, command);
 
             this.code = code;
             this._author = message.author;
             this.args = args;
-        
         
             this._message = message;
             this.currentCommand = cmdName;
@@ -46,7 +43,7 @@ class interpreter {
             this.res = code;
             
             // Start the Interpreter
-            await this._startInterpreter(client, message.author, args, message, cmdName);
+            await this.startInterpreter(client, message.author, args, message, cmdName);
             let res = await this.res;
             const isReply = messageReply ? true : false;
             let EmbedResult = await this._getEmbed(client, command);
@@ -87,63 +84,82 @@ class interpreter {
         });
     }
     
+    /**
+     * Gets all Properties of the command(s) user has created
+     * @param {Collection} collections - Collections of Commands and Embeds
+     * @param {string} currentCommand - The current command being requested
+     * @returns {Object}
+     */
+    async getAllProperties(collections, currentCommand) {
+        const [commands] = collections;
+        const cmdProperties = await commands.get(currentCommand);
+        const cmdName = cmdProperties?.name;
+        const code = `${cmdProperties ? cmdProperties?.code : ''}`
+        const messageReply = cmdProperties?.messageReply;
+        const sendTyping = cmdProperties?.sendTyping;
+        
+        return {
+            cmdName,
+            code,
+            messageReply,
+            sendTyping,
+        }
+    }
+    
     /** 
      * Gets the Embed of the command, if there is one
-     * @param {Client} client The Client you are running
-     * @param {string} command The name of the command
+     * @param {Client} client - The Client you are running
+     * @param {string} command - The name of the command
      * @returns {MessageEmbed[]|null}
      * @private
      */
     _getEmbed(client, command) {
+        if((embeds.get(command)) === null) return null;
+        
         // Raw Embed Values
-        const RawEmbedTitle = client.embedTitle.get(command);
-        const RawEmbedDescription = client.embedDesc.get(command);
-        const RawEmbedFooter = client.embedFooter.get(command);
-        const RawEmbedFields = client.embedFields.get(command);
-        const RawEmbedColor = client.embedColor.get(command);
-        const RawEmbedTimestamp = client.embedTimestamp.get(command);
-        const RawEmbedAuthor = client.embedAuthor.get(command);
-        const RawEmbedAuthorURL = client.embedAuthorURL.get(command);
+        const RawEmbed = embeds.get(command);
             
         let EmbedRaw = new MessageEmbed();
-            
+        
+        // Converts it all to an Embed
         if (
-            RawEmbedTitle !== undefined && 
-            RawEmbedDescription !== undefined
+            RawEmbed?.title !== undefined && 
+            RawEmbed?.description !== undefined
         ) {
-            if (RawEmbedTitle) EmbedRaw.setTitle(RawEmbedTitle.toString());
+            if (RawEmbed?.title) EmbedRaw.setTitle(RawEmbed?.title?.toString());
             
-            if (RawEmbedDescription) EmbedRaw.setDescription(RawEmbedDescription.toString());
+            if (RawEmbed?.description) EmbedRaw.setDescription(RawEmbed?.description?.toString());
             
-            if (RawEmbedFooter) EmbedRaw.setFooter(RawEmbedFooter.toString());
+            if (RawEmbed?.footer) EmbedRaw.setFooter(RawEmbed?.footer?.toString());
             
-            if (RawEmbedFields) {
-                const EmbedFields = RawEmbedFields.forEach((x) => {
-                    EmbedRaw.addField(x.name, x.value, x.inline ? x.inline : null);
+            if (RawEmbed?.fields) {
+                const EmbedFields = RawEmbed?.fields?.forEach((x) => {
+                    EmbedRaw.addField(x.name, x.value, x.inline ? x.inline : false);
                 });
             }
             
-            if (RawEmbedColor) EmbedRaw.setColor(RawEmbedColor.toString());
+            if (RawEmbed?.color) EmbedRaw.setColor(RawEmbed?.color?.toString());
             
-            if (RawEmbedTimestamp && RawEmbedTimestamp == true) EmbedRaw.setTimestamp();
+            if (RawEmbed?.timestamp && RawEmbed?.timestamp === true) EmbedRaw.setTimestamp();
             
-            if (RawEmbedAuthor) {
-                const AuthorURL = RawEmbedAuthorURL ? RawEmbedAuthorURL.toString() : null;
+            if (RawEmbed?.author) {
+                const AuthorURL = RawEmbed?.authorURL ? RawEmbed?.authorURL.toString() : null;
                 
-                EmbedRaw.setAuthor(RawEmbedAuthor.toString(), AuthorURL);
+                EmbedRaw.setAuthor(RawEmbed?.author?.toString(), AuthorURL);
             }
             
             return [EmbedRaw];
-        } else return [];
+        } 
+        
+        return [];
     }
     
     /**
      * Starts the Interpreter
      * @param {Client} client
      * @returns {string}
-     * @private
      */
-    async _startInterpreter(client, author, args, message, currentCommand) {
+    async startInterpreter(client, author, args, message, currentCommand) {
         const funcs = fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));
         
         /**

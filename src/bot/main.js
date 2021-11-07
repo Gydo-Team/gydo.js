@@ -7,7 +7,7 @@ const client = require('../utils/client');
 const fs = require("fs");
 const chalk = require("chalk");
 
-const { commands } = require('../Collections');
+const { commands, embeds } = require('../Collections');
 client.botprefix = new Collection();
 
 const Interpreter = require("./interpreter");
@@ -160,7 +160,10 @@ class Bot extends BaseBot {
      * Listens/Detects for Message Creation, and Detects the command, if any.
      */
     MessageDetect() {
-        new Interpreter(client);
+        new Interpreter(client, [
+            commands,
+            embeds
+        ]);
     }
 }
 
