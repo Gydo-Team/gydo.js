@@ -1,22 +1,16 @@
+'use strict';
+
 const client = require('../utils/client');
 const { MessageEmbed, Collection } = require('discord.js');
 const discord = require('discord.js');
-
-client.embedTitle = new Collection();
-client.embedDesc = new Collection();
-client.embedFooter = new Collection();
-client.embedFields = new Collection();
-client.embedColor = new Collection();
-client.embedTimestamp = new Collection();
-client.embedAuthor = new Collection();
-client.embedAuthorURL = new Collection();
+const { embeds } = require('../Collections');
 
 /**
  * Discord Message Embed
  */
 class Embed {
     /** 
-     * @typedef {Object} IEmbed
+     * @typedef {Object} EmbedStructure
      * @property {string} [title]
      * @property {string} [author]
      * @property {string} [authorURL]
@@ -27,8 +21,8 @@ class Embed {
      * @property {boolean} [timestamp]
      */
     
-    /** 
-     * @typedef {Object[]} IEmbedFields
+    /**
+     * @typedef {Object[]} EmbedFields
      * @property {string} [name]
      * @property {string} [value]
      * @property {boolean} [inline]
@@ -45,24 +39,17 @@ class Embed {
 
         const { title, description, footer, fields, color, timestamp, author, authorURL } = options;
         
-        this.target = target;
-        this.embedTitle = title;
-        this.embedDesc = description;
-        this.embedFooter = footer;
-        this.embedFields = fields;
-        this.embedColor = color;
-        this.embedTimestamp = timestamp;
-        this.embedAuthor = author;
-        this.embedAuthorURL = authorURL;
+        this.target = target ?? null;
+        this.title = title ?? null;
+        this.description = description ?? null;
+        this.footer = footer ?? null;
+        this.fields = fields ?? null;
+        this.color = color ?? null;
+        this.timestamp = timestamp ?? null;
+        this.author = author ?? null;
+        this.authorURL = authorURL ?? null;
         
-        client.embedTitle.set(target, title);
-        client.embedDesc.set(target, description);
-        client.embedFooter.set(target, footer);
-        client.embedFields.set(target, fields);
-        client.embedColor.set(target, color);
-        client.embedTimestamp.set(target, timestamp);
-        client.embedAuthor.set(target, author);
-        client.embedAuthorURL.set(target, authorURL);
+        embeds.set(target, { ...this });
     }
     
     /** 
@@ -70,8 +57,8 @@ class Embed {
      * @returns {MessageEmbed}
      */
     static JSONtoEmbed(rawjson) {
-        const JSONparse = JSON.parse(rawjson);
-        const Embed = new MessageEmbed(JSONparse);
+        const parsed = JSON.parse(rawjson);
+        const Embed = new MessageEmbed(parsed);
         
         return Embed;
     }
@@ -82,14 +69,16 @@ class Embed {
      */
     toJSON() {
         return {
-            title: this.embedTitle,
-            description: this.embedDesc,
-            footer: this.embedFooter,
-            fields: this.embedFields,
-            color: this.embedColor,
-            timestamp: this.embedTimestamp,
-            author: this.embedAuthor,
-            authorURL: this.embedAuthorURL
+            title: this.title,
+            description: this.description,
+            footer: this.footer,
+            fields: this.fields,
+            color: this.color,
+            timestamp: this.timestamp,
+            author: {
+                name: this.author,
+                url: this.authorURL,
+            },
         }
     }
 }

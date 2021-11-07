@@ -9,14 +9,15 @@ import {
     Constants,
     CommandInteractionOptionResolver,
     ColorResolvable,
+    Collection,
+    GuildMember,
     HexColorString,
     Intents,
     Message,
+    MessageEmbed,
     Presence,
     User,
-    GuildMember,
     Role,
-    MessageEmbed,
     Interaction
 } from "discord.js";
 import { EventEmitter } from 'events';
@@ -24,7 +25,7 @@ import {
     Snowflake,
 } from 'discord-api-types/v9';
 
-//#region
+//#region Classes
 export class ActivityManager {
     public constructor(data: Bot);
     public setActivity(status: string, options: ActivityTypes): void;
@@ -83,21 +84,21 @@ export interface SupportedClientEvents {
 
 export class EventsManager extends EventEmitter {
     public constructor();
-    public on<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    public on<K extends keyof SupportedClientEvents>(event: K, listener: (...args: SupportedClientEvents[K]) => Awaitable<void>): this;
     
-    public on<O extends string | symbol>(
-        event: Exclude<O, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
+    public on<S extends string | symbol>(
+        event: Exclude<S, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
     ): this;
     
-    public emit<I extends keyof SupportedClientEvents>(event: I, ...args: SupportedClientEvents[I]): boolean;
-    public emit<E extends string | symbol>(
-        event: Exclude<E, keyof SupportedClientEvents>, ...args: unknown[]
+    public emit<K extends keyof SupportedClientEvents>(event: K, ...args: SupportedClientEvents[K]): boolean;
+    public emit<S extends string | symbol>(
+        event: Exclude<S, keyof SupportedClientEvents>, ...args: unknown[]
     ): boolean;
     
-    public off<I extends keyof SupportedClientEvents>(event: I, listener: (...args: SupportedClientEvents[I]) => Awaitable<void>): this;
+    public off<K extends keyof SupportedClientEvents>(event: K, listener: (...args: SupportedClientEvents[K]) => Awaitable<void>): this;
     
-    public off<O extends string | symbol>(
-        event: Exclude<O, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
+    public off<S extends string | symbol>(
+        event: Exclude<S, keyof SupportedClientEvents>, listener: (...args: any[]) => Awaitable<void>
     ): this;
 }
 
@@ -114,7 +115,8 @@ export class guildMemberRemove {
 }
 
 export class interpreter {
-    public constructor(client: Client);
+    public constructor(client: Client, collections: Collection[]);
+    public getAllProperties(collections: Collection[], currentCommand: string): Promise<object>;
     private _getEmbed(client: Client, command: string): MessageEmbed | null;
     private _isReply(command: string, client: Client): boolean;
     private readonly code: string;
@@ -123,7 +125,7 @@ export class interpreter {
     private readonly args: string[];
     private readonly _message: string;
     private readonly currentCommand: string | null;
-    private _startInterpreter(client: Client): string;
+    public  startInterpreter(client: Client): Promise<void>;
 }
 
 export class InterpreterError extends Error {
@@ -168,7 +170,7 @@ export class SlashCommandManager {
 
 //#endregion
 
-//#region
+//#region Interfaces and Types
 export interface BotOptions {
     token: string;
     prefix: string;
