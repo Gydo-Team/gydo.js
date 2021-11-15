@@ -114,7 +114,7 @@ class interpreter {
      * @private
      */
     _getEmbed(client, command) {
-        if((embeds.get(command)) === null) return null;
+        if(embeds.get(command) === null) return null;
         
         // Raw Embed Values
         const RawEmbed = embeds.get(command);
@@ -160,7 +160,7 @@ class interpreter {
      * @returns {string}
      */
     async startInterpreter(client, author, args, message, currentCommand) {
-        const funcs = fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));
+        const funcs = await fs.readdirSync(path.join(__dirname, "../funcs")).filter(file => file.endsWith('.js'));
         
         /**
          * Array of the things the interpreter needs to work on, if any

@@ -4,8 +4,7 @@
 const args = async (client, code, author, args, message, currentCommand) => {
     if(!args.length) return code;
     
-    const c = client.cmdcode.get(currentCommand);
-    const rawCode = `${c}`;
+    const rawCode = `${code}`;
     
     let argNum;
     let argRes;

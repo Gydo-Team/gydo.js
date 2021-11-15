@@ -43,6 +43,7 @@ export class Bot extends BaseBot {
     public readonly prefix: string;
     public readonly id: Snowflake | null;
     public readonly tag: string | null;
+    public user: ClientUser | null;
     public activity: ActivityManager;
     public slashCommand: SlashCommandManager;
     public events: EventsManager;

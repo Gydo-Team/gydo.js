@@ -100,6 +100,8 @@ class Bot extends BaseBot {
              * @readonly
              */
             this.id = c.user?.id ?? null;
+            
+            this.user = c?.user ?? null;
         });
         
         /**
