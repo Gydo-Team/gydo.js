@@ -1,7 +1,1 @@
-# Modules
-node_modules/
-package-lock.json
-
-# Miscellaneous
-.git/
-.github/
+node_modules
