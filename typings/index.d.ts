@@ -1,4 +1,5 @@
 import {
+    Awaitable,
     Client,
     Collection,
 } from 'discord.js';
@@ -21,6 +22,7 @@ export class Bot extends Client {
     public command(options: CommandOptions): void;
     public slashCommand(options: CommandOptions): void;
     private _listenMessages(): void;
+    public onReady(cb: (client?: Client<true>) => Awaitable<void>): void;
 }
 
 export class MessagesInterpreter {

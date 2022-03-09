@@ -69,6 +69,21 @@ class Bot extends Client {
     _listenMessages() {
         new MessagesInterpreter(this);
     }
+
+    /**
+     * @callback OnReady
+     * @param {Client} client
+     */
+
+    /**
+     * Call a function when the bot is ready
+     * @param {OnReady}
+     */
+    onReady(cb) {
+        if (typeof cb !== 'function') throw new TypeError('First Argument must be a function');
+
+        this.once('ready', (c) => cb(c));
+    }
 }
 
 module.exports = Bot;
