@@ -13,6 +13,16 @@ const MessagesInterpreter = require('../interpreters/Interpreter');
  * @extends {Client}
  */
 class Bot extends Client {
+    /**
+     * @typedef {Object} BotOptions
+     * @property {string} token
+     * @property {string} prefix
+     */
+
+    /**
+     * Starting point of your bot
+     * @param {BotOptions} options
+     */
     constructor(options) {
         super({
             intents: [
