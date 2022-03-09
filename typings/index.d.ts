@@ -20,7 +20,7 @@ export class Bot extends Client {
     public slashCommands: Collection;
     public command(options: CommandOptions): void;
     public slashCommand(options: CommandOptions): void;
-    public listenMessages(): void;
+    private _listenMessages(): void;
 }
 
 export class MessagesInterpreter {

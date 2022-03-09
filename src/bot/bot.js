@@ -8,6 +8,8 @@ const chalk = require('chalk');
 const MessagesInterpreter = require('../interpreters/Interpreter');
 
 /**
+ * Starting point of your bot
+ * @class
  * @extends {Client}
  */
 class Bot extends Client {
@@ -32,8 +34,21 @@ class Bot extends Client {
         });
 
         this.commands = new Collection();
+
+        // Start listening to messages
+        this._listenMessages();
     }
 
+    /**
+     * @typedef {Object} CommandOptions
+     * @property {string} name
+     * @property {string} code
+     */
+
+    /**
+     * Register a command
+     * @param {CommandOptions} options
+     */
     command(options = {}) {
         const { name, code } = options;
 
@@ -49,8 +64,9 @@ class Bot extends Client {
     /**
      * Starts to listen to Message Events
      * Should only be initiated once.
+     * @private
      */
-    listenMessages() {
+    _listenMessages() {
         new MessagesInterpreter(this);
     }
 }
