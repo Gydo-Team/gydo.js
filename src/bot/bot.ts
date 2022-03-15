@@ -1,18 +1,27 @@
-const {
+import {
+    Awaitable,
     Collection,
-    Client, 
+    Client,
     Intents,
-} = require('discord.js');
-const chalk = require('chalk');
+} from 'discord.js';
+import * as chalk from 'chalk';
 
-const MessagesInterpreter = require('../interpreters/Interpreter');
+import MessagesInterpreter from '../interpreters/Interpreter';
+
+import { 
+    BotOptions,
+    CommandOptions,
+} from '../../typings/index';
 
 /**
  * Starting point of your bot
  * @class
  * @extends {Client}
  */
-class Bot extends Client {
+export default class Bot extends Client {
+    prefix: string;
+    commands: Collection<string, CommandOptions>;
+
     /**
      * @typedef {Object} BotOptions
      * @property {string} token
@@ -23,7 +32,7 @@ class Bot extends Client {
      * Starting point of your bot
      * @param {BotOptions} options
      */
-    constructor(options) {
+    public constructor(options: BotOptions) {
         super({
             intents: [
                 Intents.FLAGS.GUILDS,
@@ -59,7 +68,7 @@ class Bot extends Client {
      * Register a command
      * @param {CommandOptions} options
      */
-    command(options = {}) {
+    public command(options: CommandOptions) {
         const { name, code } = options;
 
         if(!name) throw new Error('No Command Name Given');
@@ -76,7 +85,7 @@ class Bot extends Client {
      * Should only be initiated once.
      * @private
      */
-    _listenMessages() {
+    private _listenMessages() {
         new MessagesInterpreter(this);
     }
 
@@ -87,13 +96,11 @@ class Bot extends Client {
 
     /**
      * Call a function when the bot is ready
-     * @param {OnReady}
+     * @param {OnReady} cb
      */
-    onReady(cb) {
+    public onReady(cb: (client: Client<true>) => Awaitable<void>) {
         if (typeof cb !== 'function') throw new TypeError('First Argument must be a function');
 
         this.once('ready', (c) => cb(c));
     }
 }
-
-module.exports = Bot;

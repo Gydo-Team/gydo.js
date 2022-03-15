@@ -1,11 +1,13 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "strict": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "skipDefaultLibCheck": true
-    }, 
-    "exclude": ["node_modules", "src", "docs"]
+	"compilerOptions": {
+		"target": "ESNext",
+		"strict": true,
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"removeComments": true,
+		"module": "CommonJS",
+		"esModuleInterop": true,
+		"moduleResolution": "Node"
+	},
+	"exclude": ["node_modules", "dist"]
 }
