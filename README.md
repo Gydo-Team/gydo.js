@@ -23,7 +23,7 @@
 
 ## Rewrite
 
-gydo.js is currently being rewritten, for more info go to our [GitHub repo](https://github.com/Gydo-Team/gydo.js)
+gydo.js is currently being rewritten, for more info go to our [GitHub repo](https://github.com/Gydo-Team/gydo.js) (_And to the rewrite branch_)
 
 If you see any bugs/issue you may report it to the GitHub repo.
 
