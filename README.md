@@ -49,7 +49,7 @@ bot.command({
 
 You can contribute on gydo.js dev branch by making a pull request on our [GitHub Repository](https://github.com/Gydo-Team/gydo.js)
 
-[See Contributing Guide](https://github.com/Gydo-Team/gydo.js-dev/blob/main/docs/CONTRIBUTING.md)
+[See Contributing Guide](https://github.com/Gydo-Team/gydo.js/blob/main/CONTRIBUTING.md)
 
 ...and Thanks for Contributing!
 
