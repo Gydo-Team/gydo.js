@@ -7,6 +7,22 @@ the PR should be something that would be useful for the users.
 
 Changes description should be simple, if possible.
 
+Also make sure you add JSDoc comments for things you've added, if needed.
+
+Example:
+
+```js
+class Something {
+    /**
+     * Description here
+     * @param {any} param
+     */
+    constructor(param) {}
+}
+```
+
+[See more about JSDoc Comments here](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html)
+
 ### Git Commits
 
 - Commits should use past tense (e.g. `add some feature`)
