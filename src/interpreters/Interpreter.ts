@@ -1,25 +1,29 @@
-class MessagesInterpreter {
-    constructor(bot) {
+import Bot from '../bot/bot';
+
+export default class MessagesInterpreter {
+    bot: Bot;
+    prefix: string;
+
+    public constructor(bot: Bot) {
         this.bot = bot;
         this.prefix = this.bot.prefix;
         this.listenMessages();
     }
     
-    listenMessages() {
+    public listenMessages() {
         const prefix = this.prefix;
         const client = this.bot;
 
         client.on('messageCreate', (message) => {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
-            const command = args.shift().toLowerCase();
+            const command = args!.shift()!.toLowerCase();
             
             if(!message.content.startsWith(prefix)) return;
             if(message.author.bot) return;
             
-            const {
-                name,
-                code,
-            } = client.commands.get(command);
+            const cmd = client.commands.get(command);
+            if(!cmd) return;
+            const { name, code } = cmd;
             
             try {
                 if(command === name) {
@@ -33,5 +37,3 @@ class MessagesInterpreter {
         });
     }
 }
-
-module.exports = MessagesInterpreter;

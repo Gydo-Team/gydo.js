@@ -11,16 +11,15 @@ export interface BotOptions {
 
 export interface CommandOptions {
     name: string;
-    prefix: string;
+    code: string;
 }
 
 export class Bot extends Client {
-    public constructor(options: BotOptions);
     public prefix: string;
-    public commands: Collection;
-    public slashCommands: Collection;
+    public commands: Collection<string, CommandOptions>;
+
+    public constructor(options: BotOptions);
     public command(options: CommandOptions): void;
-    public slashCommand(options: CommandOptions): void;
     private _listenMessages(): void;
     public onReady(cb: (client?: Client<true>) => Awaitable<void>): void;
 }

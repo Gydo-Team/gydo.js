@@ -43,7 +43,7 @@ bot.command({
 });
 ```
 
-**Note:** the `Bot` class extends the [Client](https://discord.js.org/#/docs/discord.js/stable/class/Client) class, that is why we are able to access the ping value
+**Note:** the `Bot` class extends the [Client](https://discord.js.org/#/docs/discord.js/stable/class/Client) class, that is why we are able to access the ping value.
 
 ## Contributing
 

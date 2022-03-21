@@ -4,14 +4,15 @@
   "description": "'Gydo-js' is a form of discord.js designed to simplify the process of creating a Discord bot.",
   "files": [
     "src",
+    "dist",
     "typings"
   ],
   "exports": {
     ".": {
-      "require": "./src/index.js"
+      "require": "./dist/index.js"
     }
   },
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "node .",
     "test:tsc": "tsc"
