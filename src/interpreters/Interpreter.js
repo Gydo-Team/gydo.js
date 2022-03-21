@@ -1,22 +1,17 @@
-import Bot from '../bot/bot';
-
-export default class MessagesInterpreter {
-    bot: Bot;
-    prefix: string;
-
-    public constructor(bot: Bot) {
+class MessagesInterpreter {
+    constructor(bot) {
         this.bot = bot;
         this.prefix = this.bot.prefix;
         this.listenMessages();
     }
     
-    public listenMessages() {
+    listenMessages() {
         const prefix = this.prefix;
         const client = this.bot;
 
         client.on('messageCreate', (message) => {
             const args = message.content.slice(prefix.length).trim().split(/ +/);
-            const command = args!.shift()!.toLowerCase();
+            const command = args.shift().toLowerCase();
             
             if(!message.content.startsWith(prefix)) return;
             if(message.author.bot) return;
@@ -37,3 +32,5 @@ export default class MessagesInterpreter {
         });
     }
 }
+
+module.exports = MessagesInterpreter;
