@@ -4,6 +4,7 @@ import {
     Collection,
 } from 'discord.js';
 
+//#region Interfaces
 export interface BotOptions {
     token: string;
     prefix: string;
@@ -13,7 +14,9 @@ export interface CommandOptions {
     name: string;
     code: string;
 }
+//#endregion
 
+//#region Classes
 export class Bot extends Client {
     public prefix: string;
     public commands: Collection<string, CommandOptions>;
@@ -30,3 +33,4 @@ export class MessagesInterpreter {
     public prefix: string;
     public listenMessages(): void;
 }
+//#endregion
