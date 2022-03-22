@@ -94,6 +94,17 @@ class Bot extends Client {
 
         this.once('ready', (c) => cb(c));
     }
+
+    /** 
+     * Sets the activity of your bot.
+     * @param {string} name
+     * @param {string} type
+     */
+    setActivity(name, type) {
+        this.once('ready', () => {
+            this.user.setActivity(name, { type });
+        });
+    }
 }
 
 

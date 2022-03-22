@@ -25,6 +25,7 @@ export class Bot extends Client {
     public command(options: CommandOptions): void;
     private _listenMessages(): void;
     public onReady(cb: (client?: Client<true>) => Awaitable<void>): void;
+    public setActivity(name: string, type: string): void;
 }
 
 export class MessagesInterpreter {
