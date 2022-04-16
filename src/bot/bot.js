@@ -17,6 +17,7 @@ class Bot extends Client {
      * @typedef {Object} BotOptions
      * @property {string} token
      * @property {string} prefix
+     * @property {boolean} logEvents
      */
 
     /**
@@ -31,17 +32,20 @@ class Bot extends Client {
             ],
         });
         const { token, prefix } = options;
-        if(!token) throw new Error('No Token Provided');
-        if(!prefix) throw new Error('No Prefix Provided');
+        if (!token) throw new Error('No Token Provided');
+        if (!prefix) throw new Error('No Prefix Provided');
+        if (options.logReady !== false) options.logReady = true;
 
         this.prefix = prefix;
 
         this.login(token);
-        this.once('ready', (c) => {
-            console.log(
-                chalk.red(`Bot is Ready | Logged in as ${c.user.tag}`)
-            )
-        });
+        if (options.logReady !== false) {
+            this.once('ready', (c) => {
+                console.log(
+                    chalk.red(`Bot is Ready | Logged in as ${c.user.tag}`)
+                );
+            });
+        }
 
         this.commands = new Collection();
 

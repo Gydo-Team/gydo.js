@@ -8,6 +8,7 @@ import {
 export interface BotOptions {
     token: string;
     prefix: string;
+    logReady?: boolean;
 }
 
 export interface CommandOptions {
