@@ -92,7 +92,7 @@ class Bot extends Client {
     onReady(cb) {
         if (typeof cb !== 'function') throw new TypeError('First Argument must be a function');
 
-        this.once('ready', (c) => cb(c));
+        this.once('ready', cb);
     }
 
     /** 
