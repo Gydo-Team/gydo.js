@@ -76,15 +76,6 @@ class Bot extends Client {
     }
 
     /**
-     * Starts to listen to Message Events
-     * Should only be initiated once.
-     * @private
-     */
-    _listenMessages() {
-        new MessagesInterpreter(this);
-    }
-
-    /**
      * @callback OnReady
      * @param {Client} client
      */
@@ -108,6 +99,15 @@ class Bot extends Client {
         this.once('ready', () => {
             this.user.setActivity(name, { type });
         });
+    }
+
+    /**
+     * Starts to listen to Message Events
+     * Should only be initiated once.
+     * @private
+     */
+    _listenMessages() {
+        new MessagesInterpreter(this);
     }
 }
 
