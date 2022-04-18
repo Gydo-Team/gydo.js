@@ -111,5 +111,4 @@ class Bot extends Client {
     }
 }
 
-
 module.exports = Bot;
